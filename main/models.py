@@ -1,5 +1,7 @@
 from django.db import models
-from django.contrib.postgres.fields import HStoreField
+from django.contrib.postgres.fields import ArrayField
+
+from .validators import validate_questionnaire_fields
 
 
 class Questionnaire(models.Model):
@@ -9,7 +11,7 @@ class Questionnaire(models.Model):
 
     title = models.CharField(max_length=200)
 
-    type = (
+    TYPE_CHOICES = (
         ('start', 'Старторая анкета'),
         ('first', 'Анкета первой категории значимости'),
         ('second', 'Анкета второй категории значимости'),
@@ -17,8 +19,9 @@ class Questionnaire(models.Model):
         ('without', 'Анкета без категории значимости'),
         ('determine', 'Анкета определения категории значимости'),
     )
+    type = models.CharField(max_length=200, choices=TYPE_CHOICES, blank=True, null=True)
 
-    fields = HStoreField(blank=True, null=True)
+    fields = ArrayField(ArrayField(models.TextField()), blank=True, null=True, validators=[validate_questionnaire_fields])
 
     def __str__(self):
-        return self.title
+        return f'{self.title} - {self.get_type_display()}'
