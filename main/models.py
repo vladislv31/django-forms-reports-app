@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import HStoreField
 
 
 class Questionnaire(models.Model):
@@ -17,4 +18,7 @@ class Questionnaire(models.Model):
         ('determine', 'Анкета определения категории значимости'),
     )
 
-    fields = models.TextField()
+    fields = HStoreField(blank=True, null=True)
+
+    def __str__(self):
+        return self.title
