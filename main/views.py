@@ -4,12 +4,16 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
 
 from django.contrib.auth.views import LoginView
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
 
-from .forms import MainLoginForm
+from .forms import MainLoginForm, MainRegisterForm
 
 
 def index_view(request):
+
+    if not request.user.is_authenticated:
+        return redirect('login')
+
     return render(request, 'main/index.html')
 
 
@@ -25,11 +29,15 @@ class MainLoginView(LoginView):
 
 class MainRegisterView(FormView):
     template_name = 'main/register.html'
-    form_class = UserCreationForm
+    form_class = MainRegisterForm
     success_url = reverse_lazy('index')
+
+    def form_valid(self, form):
+        form.save()
+        return super(MainRegisterView, self).form_valid(form)
 
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
-            return redirect('index')
+            return redirect('login')
 
         return super(MainRegisterView, self).get(*args, **kwargs)
