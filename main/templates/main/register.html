@@ -1,0 +1,22 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+
+    <p><label for="">{{ form.username.label }}</label></p>
+    <p>{{ form.username }}</p>
+
+    <p><label for="">{{ form.password1.label }}</label></p>
+    <p>{{ form.password1 }}</p>
+
+    <p><label for="">{{ form.password2.label }}</label></p>
+    <p>{{ form.password2 }}</p>
+
+    <input type="submit" value="Register">
+</form>
+
+{% endblock %}
