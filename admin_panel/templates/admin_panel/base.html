@@ -1,0 +1,39 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="{% static 'main/css/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="{% static 'main/css/main.min.css' %}" rel="stylesheet">
+
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+  <body>
+
+    <header class="header border-bottom">
+        <div class="container">
+            <div class="header-container d-flex flex-wrap justify-content-between py-3">
+                <a href="{% url 'index' %}" class="d-flex align-items-center text-dark text-decoration-none">
+                    <span class="fs-4">Админ-панель</span>
+                </a>
+                {% with request.resolver_match.url_name as url_name %}
+                <ul class="nav nav-pills">
+                    <li class="nav-item"><a href="{% url 'admin_panel:questionnaires' %}" class="nav-link {% if url_name == 'admin-questionnaires' %}active{% endif %}">Анкеты</a></li>
+                    <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Вернуться на сайт</a></li>
+                    <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Выход</a></li>
+                </ul>
+                {% endwith %}
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script src="{% static 'main/js/bootstrap.bundle.min.js' %}" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  </body>
+</html>
