@@ -1,0 +1,27 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Стартовая анкета{% endblock %}
+
+{% block content %}
+
+<p>Перед тем, как начать пользоваться сайтом, вам нужно заполнить стартовую анкету ниже.</p>
+
+<div class="start-form block">
+    <div class="start-form__errors">
+        
+    </div>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="industry" class="form-label">{{ form.industry.label }}</label>
+            {{ form.industry }}
+        </div>
+        <div class="mb-3">
+            <label for="type_used_systems" class="form-label">{{ form.type_used_systems.label }}</label>
+            {{ form.type_used_systems }}
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+</div>
+
+{% endblock %}
