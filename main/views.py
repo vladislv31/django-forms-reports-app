@@ -10,9 +10,19 @@ from .models import UserOrganizationInfo, Questionnaire
 
 from .mixins import LoginRequiredMixin, StartFormRequired
 
+import json
+
 
 def do_questionnaire_view(request, type_slug):
-    return render(request, template_name='main/do_questionnaire.html')
+    if not Questionnaire.objects.filter(type=type_slug).exists():
+        return redirect('index')
+
+    questionnaire = Questionnaire.objects.get(type=type_slug)
+
+    return render(request, 'main/do_questionnaire.html', {
+        'questionnaire_type': questionnaire.get_type_display(),
+        'questionnaire_fields': json.loads(questionnaire.fields)
+    })
 
 
 class QuestionnaireListView(LoginRequiredMixin, StartFormRequired, ListView):
