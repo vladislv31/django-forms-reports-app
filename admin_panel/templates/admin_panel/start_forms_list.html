@@ -1,0 +1,32 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Результаты стартовых анкет{% endblock %}
+
+{% block content %}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Пользователь</th>
+      <th scope="col">Отрасль предприятия</th>
+      <th scope="col">Тип используемых систем</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for start_form in start_forms %}
+    <tr>
+      <td>{{ start_form.user }}</td>
+      <td>{{ start_form.industry }}</td>
+      <td>{{ start_form.type_used_systems }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td>Пусто...</td>
+        <td></td>
+        <td></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

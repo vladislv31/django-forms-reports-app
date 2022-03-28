@@ -21,6 +21,7 @@
                 {% with request.resolver_match.url_name as url_name %}
                 <ul class="nav nav-pills">
                     <li class="nav-item"><a href="{% url 'admin_panel:questionnaires' %}" class="nav-link {% if url_name == 'questionnaires' %}active{% endif %}">Анкеты</a></li>
+                    <li class="nav-item"><a href="{% url 'admin_panel:start-forms' %}" class="nav-link {% if url_name == 'start-forms' %}active{% endif %}">Стартовые анкеты</a></li>
                     <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Вернуться на сайт</a></li>
                     <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Выход</a></li>
                 </ul>
