@@ -2,25 +2,24 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 from django.views.generic.edit import FormView, CreateView
+from django.views.generic.list import ListView
 from django.contrib.auth.views import LoginView
 
 from .forms import MainLoginForm, MainRegisterForm, StartFormForm
-from .models import UserOrganizationInfo
+from .models import UserOrganizationInfo, Questionnaire
 
-from .decorators import login_required, start_form_required
-
-from .mixins import LoginRequiredMixin
+from .mixins import LoginRequiredMixin, StartFormRequired
 
 
-@login_required
-@start_form_required
-def index_view(request):
-    return render(request, 'main/index.html')
+def do_questionnaire_view(request, type_slug):
+    return render(request, template_name='main/do_questionnaire.html')
 
 
-@login_required
-def start_form_view(request):
-    return render(request, 'main/start_form.html')
+class QuestionnaireListView(LoginRequiredMixin, StartFormRequired, ListView):
+    model = Questionnaire
+    template_name = 'main/index.html'
+    context_object_name = 'questionnaires'
+    ordering = ['type']
 
 
 class StartFormView(LoginRequiredMixin, CreateView):

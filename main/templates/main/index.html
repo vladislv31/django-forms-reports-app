@@ -1,9 +1,27 @@
 {% extends 'main/base.html' %}
 
+{% load static %}
+
 {% block title %}Главная{% endblock %}
 
 {% block content %}
 
-<h1>Index page</h1>
+<h2>Доступные анкеты</h2>
+
+<div class="questionnaires">
+    <div class="row">
+        {% for questionnaire in questionnaires %}
+        <div class="col-sm-3">
+            <div class="card questionnaires__item">
+                <div class="card-body">
+                    <img src="{% static 'main/images/questionnaire.svg' %}">
+                    <h5 class="card-title">{{ questionnaire.get_type_display }}</h5>
+                    <a href="{% url 'do-questionnaire' questionnaire.type %}" class="btn btn-primary">Перейти</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
 {% endblock %}
