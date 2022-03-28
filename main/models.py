@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+from django.contrib.auth.models import User
 
 from .validators import validate_questionnaire_fields
 
@@ -25,3 +26,12 @@ class Questionnaire(models.Model):
 
     def __str__(self):
         return f'{self.title} - {self.get_type_display()}'
+
+
+class UserOrganizationInfo(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    industry = models.CharField(max_length=100)
+    type_used_systems = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f'{str(self.user).capitalize()}s organization info'

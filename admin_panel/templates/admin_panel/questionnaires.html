@@ -1,5 +1,9 @@
 {% extends 'admin_panel/base.html' %}
 
 {% block content %}
-test
+
+{% for questionnaire in questionnaires %}
+<p>{{ questionnaire }}</p>
+{% endfor %}
+
 {% endblock %}

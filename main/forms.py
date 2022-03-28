@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
+from .models import UserOrganizationInfo
+
 
 class MainLoginForm(AuthenticationForm):
 
@@ -54,3 +56,20 @@ class MainRegisterForm(UserCreationForm):
             'type': 'password'
         })
         self.fields['password2'].label = 'Повторите пароль'
+
+
+class StartFormForm(forms.ModelForm):
+
+    class Meta:
+        model = UserOrganizationInfo
+        fields = ['industry', 'type_used_systems']
+
+        widgets = {
+            'industry': forms.TextInput(attrs={'class': 'form-control'}),
+            'type_used_systems': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+        labels = {
+            'industry': 'Отрасль предприятия',
+            'type_used_systems': 'Тип используемых систем',
+        }
