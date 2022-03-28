@@ -4,29 +4,33 @@
 
 {% block content %}
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">Пользователь</th>
-      <th scope="col">Отрасль предприятия</th>
-      <th scope="col">Тип используемых систем</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for start_form in start_forms %}
-    <tr>
-      <td>{{ start_form.user }}</td>
-      <td>{{ start_form.industry }}</td>
-      <td>{{ start_form.type_used_systems }}</td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td>Пусто...</td>
-        <td></td>
-        <td></td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<h3>Стартовые анкеты</h3>
+
+<div class="start-forms">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Пользователь</th>
+        <th scope="col">Отрасль предприятия</th>
+        <th scope="col">Тип используемых систем</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for start_form in start_forms %}
+      <tr>
+        <td>{{ start_form.user }}</td>
+        <td>{{ start_form.industry }}</td>
+        <td>{{ start_form.type_used_systems }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+          <td>Пусто...</td>
+          <td></td>
+          <td></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 
 {% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Спарсенные документы{% endblock %}
+
+{% block content %}
+
+<h3>Спарсенные документы</h3>
+
+<div class="parsed-docs block">
+    <ul class="list-group list-group-flush">
+        {% for doc in parsed_documents %}
+        <li class="list-group-item"><a href="{{ doc.link }}" target="_blank">{{ doc.title }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}
