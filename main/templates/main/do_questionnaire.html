@@ -9,15 +9,15 @@
 <h3>{{ questionnaire_type }}</h3>
 
 <div class="do-questionnaire">
-    cd<form action="">
+    <form action="">
         {% for field in questionnaire_fields %}
             <div class="do-questionnaire__item block">
                 <h5>{{ field.title }} ({{ field.designation }})</h5>
                 <hr>
                 {% for question in field.questions %}
                     <div class="do-questionnaire__item-field">
-                        <div class="do-questionnaire__item-field__number">{{field.designation}}. {{ forloop.counter|add:"-1" }}</div>
-                        <div class="do-questionnaire__item-field__question">{{ question }}</div>
+                        <div class="do-questionnaire__item-field__number">{{field.designation}}. {{ question.number }}</div>
+                        <div class="do-questionnaire__item-field__question">{{ question.question_text }}</div>
                         <div class="do-questionnaire__item-field__input">
                             <select class="form-select" aria-label="Default select example">
                                 <option selected disabled>Выберите вариант ответа</option>

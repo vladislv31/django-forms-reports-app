@@ -1,0 +1,62 @@
+{% extends 'admin_panel/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<h3>Редактировать анкету</h3>
+<p>{{ questionnaire_type }}</p>
+
+<div class="edit-questionnaire">
+    <form action="" id="edit-questionnaire-form">
+        {% csrf_token %}
+        <div class="edit-questionnaire__items">
+            {% for field in questionnaire_fields %}
+                <div class="edit-questionnaire__item block" data-item-id="{{ forloop.counter }}">
+                    <div class="edit-questionnaire__item-delete">
+                        <img src="{% static 'main/images/delete.svg' %}">
+                    </div>
+                    <div class="edit-questionnaire__item-title">
+                        <label class="form-label">Название меры</label>
+                        <input type="text" class="form-control" name="{{ forloop.counter }}_title" value="{{ field.title }}" required>
+                    </div>
+                    <div class="edit-questionnaire__item-designation">
+                        <label class="form-label">Обозначние меры</label>
+                        <input type="text" class="form-control" name="{{ forloop.counter }}_designation" value="{{ field.designation }}" required>
+                    </div>
+                    <hr>
+                    <div class="edit-questionnaire__item-fields">
+                        <label class="form-label">Поля меры обеспечения безопасности значимого объекта</label>
+                        {% for question in field.questions %}
+                            <div class="edit-questionnaire__item-field" data-field-id="{{ forloop.counter }}">
+                                <div class="edit-questionnaire__item-field__number">
+                                    <input type="text" class="form-control" name="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_number" value="{{ question.number }}" required>
+                                </div>
+                                <div class="edit-questionnaire__item-field__question">
+                                    <input type="text" class="form-control" name="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question" value="{{ question.question_text }}" required>
+                                </div>
+                                <div class="edit-questionnaire__item-field__delete">
+                                    <img src="{% static 'main/images/delete.svg' %}">
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <hr>
+                    <div class="edit-questionnaire__item-add-field">
+                        <a class="link-info" href="#">Добавить вопрос</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="edit-questionnaire__add-item">
+            <a href="#" class="link-info">Добавить меру обеспечения безопасности</a>
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <div class="form-alerts">
+            <div class="alert alert-success alert-dismissible form-alerts__success">Сохранено!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+            <div class="alert alert-danger alert-dismissible form-alerts__error">Неизвестная ошибка!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

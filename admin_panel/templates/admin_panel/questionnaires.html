@@ -1,9 +1,25 @@
 {% extends 'admin_panel/base.html' %}
 
+{% load static %}
+
 {% block content %}
 
-{% for questionnaire in questionnaires %}
-<p>{{ questionnaire }}</p>
-{% endfor %}
+<h3>Анкеты</h3>
+
+<div class="questionnaires">
+    <div class="row">
+        {% for questionnaire in questionnaires %}
+        <div class="col-sm-3">
+            <div class="card questionnaires__item">
+                <div class="card-body">
+                    <img src="{% static 'main/images/questionnaire.svg' %}">
+                    <h5 class="card-title">{{ questionnaire.get_type_display }}</h5>
+                    <a href="{% url 'admin_panel:edit-questionnaire' questionnaire.type %}" class="btn btn-primary">Редактировать</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
 {% endblock %}

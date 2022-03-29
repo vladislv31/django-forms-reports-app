@@ -1,6 +1,6 @@
 from django.urls import path
 from django.views.generic.base import RedirectView
-from .views import QuestionnaireListView, UserOrganizationInfoListView, ParsedDocumentListView
+from .views import QuestionnaireListView, QuestionnaireUpdateView, UserOrganizationInfoListView, ParsedDocumentListView
 
 
 app_name = 'admin_panel'
@@ -10,4 +10,5 @@ urlpatterns = [
     path('start-forms/', UserOrganizationInfoListView.as_view(), name='start-forms'),
     path('parsed-documents/', ParsedDocumentListView.as_view(), name='parsed-documents'),
     path('questionnaires/', QuestionnaireListView.as_view(), name='questionnaires'),
+    path('edit-questionnaire/<slug:type_slug>', QuestionnaireUpdateView.as_view(), name='edit-questionnaire'),
 ]

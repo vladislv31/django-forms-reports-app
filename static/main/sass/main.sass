@@ -1,6 +1,7 @@
 body
     margin: 0
     padding: 0
+    padding-bottom: 80px
     background-color: #fcfcfc
     font-size: 16px
 
@@ -37,6 +38,8 @@ body
     margin-top: 30px
 
     &__item
+        margin-bottom: 30px
+
         &-field
             display: flex
             align-items: center
@@ -51,7 +54,7 @@ body
                 flex-basis: 70px
 
             &__question
-                flex-basis: 50%
+                flex: 1
             
             &__input
                 flex-basis: 300px
@@ -59,8 +62,61 @@ body
                 select
                     font-size: 15px
 
+.form-alerts
+    margin-top: 30px
+
+    > *
+        display: none
+
 .start-forms
     margin-top: 30px
 
 .parsed-docs
     margin-top: 30px
+
+.edit-questionnaire
+    margin-top: 30px
+
+    &__add-item
+        margin-bottom: 40px
+
+    &__item
+        margin-bottom: 30px
+        position: relative
+        padding: 25px
+
+        &-delete
+            position: absolute
+            right: 25px
+            top: 20px
+            cursor: pointer
+
+            img
+                width: 20px
+                height: auto
+
+        &-title
+            margin-bottom: 15px
+
+        &-field
+            display: flex
+            align-items: center
+            margin-bottom: 15px
+
+            &__number
+                flex-basis: 70px
+                margin-right: 15px
+
+            &__question
+                flex: 1
+
+                input
+                    font-size: 15px
+
+            &__delete
+                margin-left: 15px
+                cursor: pointer
+
+                img
+                    width: 20px
+                    height: auto

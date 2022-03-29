@@ -18,3 +18,12 @@ def validate_questionnaire_fields(fields_json):
 
         if not isinstance(field['questions'], list):
             raise ValidationError('Not valid fields')
+
+        for x in field['questions']:
+            if not isinstance(x, dict):
+                raise ValidationError('Not valid fields')
+
+            question_keys = x.keys()
+            for y in ['number', 'question_text']:
+                if y not in question_keys:
+                    raise ValidationError('Not valid fields')
