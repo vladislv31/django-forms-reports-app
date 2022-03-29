@@ -1,17 +1,18 @@
 from django.views.generic.list import ListView
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import DeleteView
 from django.views import View
 
 from django.shortcuts import render
+from django.urls import reverse_lazy
 
 from django.http import HttpResponse
-
-from main.models import Questionnaire, UserOrganizationInfo
 from .models import ParsedDocument
 
-import json
+from django.contrib.auth.models import User
 
-from pprint import pprint
+from main.models import Questionnaire, UserOrganizationInfo
+
+import json
 
 
 class UserOrganizationInfoListView(ListView):
@@ -89,3 +90,23 @@ class ParsedDocumentListView(ListView):
     model = ParsedDocument
     template_name = 'admin_panel/parsed_document_list.html'
     context_object_name = 'parsed_documents'
+
+
+class AdminListView(ListView):
+    model = User
+    template_name = 'admin_panel/admin_list.html'
+    context_object_name = 'admins'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['admins'] = context['admins'].filter(is_superuser=True)
+        context['admins'] = [admin for admin in context['admins'] if admin.username != str(self.request.user)]
+
+        return context
+
+
+class AdminDeleteView(DeleteView):
+    model = User
+    template_name = 'admin_panel/admin_delete.html'
+    context_object_name = 'admin'
+    success_url = reverse_lazy('admin_panel:admins')

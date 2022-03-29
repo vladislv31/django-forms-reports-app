@@ -1,0 +1,17 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Удалить админа{% endblock %}
+
+{% block content %}
+
+<h3>Удалить админа</h3>
+
+<div class="delete-admin">
+    <form method="POST">
+        {% csrf_token %}
+        <p>Вы уверены, что хотите удалить админа с юзернеймом <b>{{ admin.username }}</b>?</p>
+        <button type="submit" class="btn btn-danger">Удалить</button>
+    </form>
+</div>
+
+{% endblock %}

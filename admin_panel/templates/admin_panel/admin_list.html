@@ -1,0 +1,35 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Список админов{% endblock %}
+
+{% block content %}
+
+<h3>Список админов</h3>
+
+<div class="admins-table block">
+    <a href="#" class="btn btn-primary">Создать админа</a>
+    <hr>
+    <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Юзернейм</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for admin in admins %}
+          <tr>
+            <td>{{ admin.username }}</td>
+            <td><a href="{% url 'admin_panel:delete-admin' admin.id %}" class="btn btn-danger btn-sm">Удалить</a></td>
+          </tr>
+          {% empty %}
+          <tr>
+              <td>Пусто...</td>
+              <td></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
