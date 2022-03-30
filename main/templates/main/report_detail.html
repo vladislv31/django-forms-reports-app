@@ -12,7 +12,14 @@
     {% for title, questions in report_fields.items %}
         <div class="report__item block">
             <h4>Мера "{{ title }}"</h4>
-            {% for question in questions %}
+            {% if questions.not_provided_count == 0 %}
+                <p class="report__item-description report__item-description--good">Мера соблюдена и требования удовлетворены полностью.</p>
+            {% elif questions.not_provided_count == questions.fields|length %}
+                <p class="report__item-description report__item-description--bad">Мера не соблюдается, требования мер не удовлетворены:</p>
+            {% else %}
+                <p class="report__item-description report__item-description--middle">Мера соблюдена частично. Не удовлетворены следующие требования:</p>
+            {% endif %}
+            {% for question in questions.fields %}
                 <div class="report__item-question report__item-question--{% if not question.is_provided %}not-{% endif %}provided">
                     {{ question.question }}
                 </div>
@@ -24,6 +31,7 @@
             {% endfor %}
         </div>
     {% endfor %}
+    <a href="{% url 'report-download' report.id %}" target="_blank" class="btn btn-primary">Сохранить в PDF</a>
 </div>
 
 {% endblock %}

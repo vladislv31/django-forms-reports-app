@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import QuestionnaireListView, MainLoginView, MainRegisterView, StartFormView, DoQuestionnaireView, \
-    ReportListView, ReportDetailView
+    ReportListView, ReportDetailView, ReportDownloadView
 
 from django.contrib.auth.views import LogoutView
 
@@ -11,6 +11,7 @@ urlpatterns = [
 
     path('reports/', ReportListView.as_view(), name='reports'),
     path('report/<int:pk>', ReportDetailView.as_view(), name='report'),
+    path('report-download/<int:report_id>', ReportDownloadView.as_view(), name='report-download'),
 
     path('start-form/', StartFormView.as_view(), name='start-form'),
 

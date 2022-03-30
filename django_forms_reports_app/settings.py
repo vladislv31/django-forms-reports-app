@@ -150,3 +150,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRONJOBS = [
     ('0 12 * * *', 'cron.docs_parsing_cron_job'),
 ]
+
+# Admin
+
+GENERAL_ADMIN_ID = 5
