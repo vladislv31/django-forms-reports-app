@@ -1,0 +1,52 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Создать админа{% endblock %}
+
+{% block content %}
+
+<h3>Создать админа</h3>
+
+<div class="create-admin block">
+    <div class="create-admin__error">
+        {% if form.errors %}
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+            {% if form.username.errors %}
+                {% for error in form.username.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+            {% if form.password1.errors %}
+                {% for error in form.password1.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+            {% if form.password2.errors %}
+                {% for error in form.password2.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+    </div>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="username" class="form-label">{{ form.username.label }}</label>
+            {{ form.username }}
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">{{ form.password1.label }}</label>
+            {{ form.password1 }}
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">{{ form.password2.label }}</label>
+            {{ form.password2 }}
+        </div>
+        <button type="submit" class="btn btn-primary">Создать</button>
+    </form>
+</div>
+
+{% endblock %}

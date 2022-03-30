@@ -1,5 +1,5 @@
 from django.views.generic.list import ListView
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import DeleteView, FormView
 from django.views import View
 
 from django.shortcuts import render
@@ -9,6 +9,8 @@ from django.http import HttpResponse
 from .models import ParsedDocument
 
 from django.contrib.auth.models import User
+
+from .forms import AdminCreateForm
 
 from main.models import Questionnaire, UserOrganizationInfo
 
@@ -103,6 +105,19 @@ class AdminListView(ListView):
         context['admins'] = [admin for admin in context['admins'] if admin.username != str(self.request.user)]
 
         return context
+
+
+class AdminCreateView(FormView):
+    form_class = AdminCreateForm
+    template_name = 'admin_panel/admin_create.html'
+    success_url = reverse_lazy('admin_panel:admins')
+
+    def form_valid(self, form):
+        admin = form.save()
+        admin.is_superuser = True
+        admin.save()
+
+        return super(AdminCreateView, self).form_valid(form)
 
 
 class AdminDeleteView(DeleteView):
