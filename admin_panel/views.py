@@ -5,12 +5,14 @@ from django.views import View
 from django.shortcuts import render
 from django.urls import reverse_lazy
 
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from .models import ParsedDocument
 
 from django.contrib.auth.models import User
 
 from .forms import AdminCreateForm
+
+from .mixins import GeneralAdminRequired
 
 from main.models import Questionnaire, UserOrganizationInfo
 
@@ -34,7 +36,7 @@ class QuestionnaireUpdateView(View):
 
     def get(self, request, type_slug):
         if not Questionnaire.objects.all().filter(type=type_slug).exists():
-            return HttpResponse('404')
+            return Http404()
 
         questionnaire = Questionnaire.objects.get(type=type_slug)
 
@@ -45,7 +47,7 @@ class QuestionnaireUpdateView(View):
 
     def post(self, request, type_slug):
         if not Questionnaire.objects.all().filter(type=type_slug).exists():
-            return HttpResponse('404')
+            raise Http404()
 
         try:
             data = request.POST
@@ -100,7 +102,7 @@ class ParsedDocumentListView(ListView):
     context_object_name = 'parsed_documents'
 
 
-class AdminListView(ListView):
+class AdminListView(GeneralAdminRequired, ListView):
     model = User
     template_name = 'admin_panel/admin_list.html'
     context_object_name = 'admins'
@@ -113,7 +115,7 @@ class AdminListView(ListView):
         return context
 
 
-class AdminCreateView(FormView):
+class AdminCreateView(GeneralAdminRequired, FormView):
     form_class = AdminCreateForm
     template_name = 'admin_panel/admin_create.html'
     success_url = reverse_lazy('admin_panel:admins')
@@ -126,7 +128,7 @@ class AdminCreateView(FormView):
         return super(AdminCreateView, self).form_valid(form)
 
 
-class AdminDeleteView(DeleteView):
+class AdminDeleteView(GeneralAdminRequired, DeleteView):
     model = User
     template_name = 'admin_panel/admin_delete.html'
     context_object_name = 'admin'

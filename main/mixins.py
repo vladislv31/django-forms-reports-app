@@ -12,7 +12,7 @@ class LoginRequiredMixin:
         return super().dispatch(request, *args, **kwargs)
 
 
-class StartFormRequired:
+class StartFormRequiredMixin:
 
     def dispatch(self, request, *args, **kwargs):
         if not UserOrganizationInfo.objects.filter(user=request.user).exists():

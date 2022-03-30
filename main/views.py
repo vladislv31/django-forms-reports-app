@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 
 from django.views.generic.edit import FormView, CreateView
 from django.views.generic.list import ListView
@@ -10,15 +10,19 @@ from django.contrib.auth.views import LoginView
 
 from django.views import View
 
+from django.templatetags.static import static
+
 from .forms import MainLoginForm, MainRegisterForm, StartFormForm
 from .models import UserOrganizationInfo, Questionnaire, Report
 
-from .mixins import LoginRequiredMixin, StartFormRequired
+from .mixins import LoginRequiredMixin, StartFormRequiredMixin
+
+from .utils import render_to_pdf
 
 import json
 
 
-class DoQuestionnaireView(View):
+class DoQuestionnaireView(LoginRequiredMixin, StartFormRequiredMixin, View):
 
     def get(self, request, type_slug):
         if not Questionnaire.objects.filter(type=type_slug).exists():
@@ -33,7 +37,7 @@ class DoQuestionnaireView(View):
 
     def post(self, request, type_slug):
         if not Questionnaire.objects.filter(type=type_slug).exists():
-            return HttpResponse('404')
+            raise Http404()
 
         try:
             data = request.POST
@@ -68,14 +72,14 @@ class DoQuestionnaireView(View):
         return HttpResponse(json.dumps({'status': 'ok', 'redirect': str(reverse_lazy('index'))}))
 
 
-class QuestionnaireListView(LoginRequiredMixin, StartFormRequired, ListView):
+class QuestionnaireListView(LoginRequiredMixin, StartFormRequiredMixin, ListView):
     model = Questionnaire
     template_name = 'main/index.html'
     context_object_name = 'questionnaires'
     ordering = ['type']
 
 
-class ReportListView(LoginRequiredMixin, StartFormRequired, ListView):
+class ReportListView(LoginRequiredMixin, StartFormRequiredMixin, ListView):
     model = Report
     template_name = 'main/report_list.html'
     context_object_name = 'reports'
@@ -88,7 +92,38 @@ class ReportListView(LoginRequiredMixin, StartFormRequired, ListView):
         return context
 
 
-class ReportDetailView(LoginRequiredMixin, StartFormRequired, DetailView):
+class ReportDownloadView(LoginRequiredMixin, StartFormRequiredMixin, View):
+
+    def get(self, request, report_id):
+        if not Report.objects.filter(id=report_id).exists():
+            raise Http404()
+
+        report = Report.objects.get(id=report_id)
+
+        context = {'report': report, 'report_fields': json.loads(report.report),
+                   'font_path': f'{request.build_absolute_uri(static("main/fonts/tahoma.ttf"))}',
+                   'font_bold_path': f'{request.build_absolute_uri(static("main/fonts/tahoma_bold.ttf"))}'}
+
+        for field_key in context['report_fields']:
+            fields = context['report_fields'][field_key]
+            context['report_fields'][field_key] = {
+                'fields': fields,
+                'not_provided_count': len(list(filter(lambda x: not x[
+                    'is_provided'], context['report_fields'][field_key])))
+            }
+
+        pdf = render_to_pdf('main/report_pdf.html', context)
+
+        filename = f'date.pdf'
+        content = f'attachment; filename="{filename}"'
+
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = content
+
+        return response
+
+
+class ReportDetailView(LoginRequiredMixin, StartFormRequiredMixin, DetailView):
     model = Report
     template_name = 'main/report_detail.html'
     context_object_name = 'report'
@@ -96,6 +131,14 @@ class ReportDetailView(LoginRequiredMixin, StartFormRequired, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['report_fields'] = json.loads(context['report'].report)
+
+        for field_key in context['report_fields']:
+            fields = context['report_fields'][field_key]
+            context['report_fields'][field_key] = {
+                'fields': fields,
+                'not_provided_count': len(list(filter(lambda x: not x[
+                    'is_provided'], context['report_fields'][field_key])))
+            }
 
         return context
 
