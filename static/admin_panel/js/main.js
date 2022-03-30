@@ -40,13 +40,16 @@ function edit_questionnaire() {
         fields.append(`
             <div class="edit-questionnaire__item-field" data-field-id="${id}">
                 <div class="edit-questionnaire__item-field__number">
-                    <input type="text" class="form-control" name="${item_id}_${id}_number" required>
+                    <input type="text" class="form-control" name="${item_id}_${id}_number" placeholder="Номер" required>
                 </div>
                 <div class="edit-questionnaire__item-field__question">
-                    <input type="text" class="form-control" name="${item_id}_${id}_question" required>
+                    <input type="text" class="form-control" name="${item_id}_${id}_question" placeholder="Вопрос" required>
                 </div>
                 <div class="edit-questionnaire__item-field__delete">
                     <img src="/static/main/images/delete.svg">
+                </div>
+                <div class="edit-questionnaire__item-field__recommendation">
+                    <textarea name="${item_id}_${id}_recommendation" cols="30" placeholder="Рекоммендации" rows="5" class="form-control" required></textarea>
                 </div>
             </div>
         `);

@@ -1,28 +1,71 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
+from django.http import HttpResponse
+
 from django.views.generic.edit import FormView, CreateView
 from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 from django.contrib.auth.views import LoginView
 
+from django.views import View
+
 from .forms import MainLoginForm, MainRegisterForm, StartFormForm
-from .models import UserOrganizationInfo, Questionnaire
+from .models import UserOrganizationInfo, Questionnaire, Report
 
 from .mixins import LoginRequiredMixin, StartFormRequired
 
 import json
 
 
-def do_questionnaire_view(request, type_slug):
-    if not Questionnaire.objects.filter(type=type_slug).exists():
-        return redirect('index')
+class DoQuestionnaireView(View):
 
-    questionnaire = Questionnaire.objects.get(type=type_slug)
+    def get(self, request, type_slug):
+        if not Questionnaire.objects.filter(type=type_slug).exists():
+            return redirect('index')
 
-    return render(request, 'main/do_questionnaire.html', {
-        'questionnaire_type': questionnaire.get_type_display(),
-        'questionnaire_fields': json.loads(questionnaire.fields)
-    })
+        questionnaire = Questionnaire.objects.get(type=type_slug)
+
+        return render(request, 'main/do_questionnaire.html', {
+            'questionnaire_type': questionnaire.get_type_display(),
+            'questionnaire_fields': json.loads(questionnaire.fields)
+        })
+
+    def post(self, request, type_slug):
+        if not Questionnaire.objects.filter(type=type_slug).exists():
+            return HttpResponse('404')
+
+        try:
+            data = request.POST
+
+            questionnaire = Questionnaire.objects.get(type=type_slug)
+            fields = json.loads(questionnaire.fields)
+
+            report_fields = {}
+
+            for answer_key in filter(lambda x: x.endswith('_answer'), data):
+                field_id, question_id, _ = answer_key.split('_')
+                field_id, question_id = int(field_id) - 1, int(question_id) - 1
+
+                title = fields[field_id]['title']
+                if title not in report_fields.keys():
+                    report_fields[title] = []
+
+                question = fields[field_id]['questions'][question_id]['question_text']
+                recommendation = fields[field_id]['questions'][question_id]['recommendation_text']
+                answer = data[answer_key]
+
+                report_fields[title].append({'is_provided': answer == 'provided', 'question': question,
+                                             'recommendation': recommendation})
+
+            report = Report(questionnaire_title=questionnaire.get_type_display(), user=request.user, report=json.dumps(
+                report_fields))
+            report.save()
+        except Exception as err:
+            print(err)
+            return HttpResponse(json.dumps({'status': 'error'}))
+
+        return HttpResponse(json.dumps({'status': 'ok', 'redirect': str(reverse_lazy('index'))}))
 
 
 class QuestionnaireListView(LoginRequiredMixin, StartFormRequired, ListView):
@@ -30,6 +73,31 @@ class QuestionnaireListView(LoginRequiredMixin, StartFormRequired, ListView):
     template_name = 'main/index.html'
     context_object_name = 'questionnaires'
     ordering = ['type']
+
+
+class ReportListView(LoginRequiredMixin, StartFormRequired, ListView):
+    model = Report
+    template_name = 'main/report_list.html'
+    context_object_name = 'reports'
+    ordering = ['-done_date']
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['reports'] = context['reports'].filter(user=self.request.user)
+
+        return context
+
+
+class ReportDetailView(LoginRequiredMixin, StartFormRequired, DetailView):
+    model = Report
+    template_name = 'main/report_detail.html'
+    context_object_name = 'report'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['report_fields'] = json.loads(context['report'].report)
+
+        return context
 
 
 class StartFormView(LoginRequiredMixin, CreateView):

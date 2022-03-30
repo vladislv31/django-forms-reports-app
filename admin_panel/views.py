@@ -68,9 +68,13 @@ class QuestionnaireUpdateView(View):
                     question_text_key = list(filter(lambda x: x == f'{_id}_{inner_id}_question', data))[0]
                     question_text = data[question_text_key]
 
+                    recommendation_text_key = list(filter(lambda x: x == f'{_id}_{inner_id}_recommendation', data))[0]
+                    recommendation_text = data[recommendation_text_key]
+
                     questions.append({
                         'number': number,
-                        'question_text': question_text
+                        'question_text': question_text,
+                        'recommendation_text': recommendation_text
                     })
 
                 fields.append({
@@ -81,6 +85,8 @@ class QuestionnaireUpdateView(View):
 
             questionnaire = Questionnaire.objects.get(type=type_slug)
             questionnaire.fields = json.dumps(fields)
+            questionnaire.full_clean()
+
             questionnaire.save()
         except Exception as err:
             return HttpResponse(json.dumps({'status': 'error'}))

@@ -101,10 +101,11 @@ body
         &-field
             display: flex
             align-items: center
+            flex-wrap: wrap
             margin-bottom: 15px
 
             &__number
-                flex-basis: 70px
+                flex-basis: 100px
                 margin-right: 15px
 
             &__question
@@ -121,8 +122,61 @@ body
                     width: 20px
                     height: auto
 
+            &__recommendation
+                flex-basis: 100%
+                margin-top: 15px
+
 .admins-table
     margin-top: 30px
 
 .delete-admin, .create-admin
     margin-top: 30px
+
+.reports, .report
+    margin-top: 30px
+
+.report
+    &__item
+        margin-bottom: 30px
+
+        h4
+            margin-bottom: 20px
+            font-size: 22px
+
+        &-question
+            padding: 15px
+            margin-bottom: 15px
+            background-color: #fafafa
+            border: 1px solid #dee2e6
+            position: relative
+
+            &:last-child
+                margin-bottom: 0
+
+            &::after
+                font-size: 28px
+                position: absolute
+                right: 0
+                top: 0
+                padding: 7px
+
+            &--provided
+                &::after
+                    content: '\2713'
+                    color: green
+                
+            &--not-provided
+                &::after
+                    content: '\00d7'
+                    padding-right: 13px
+                    color: #ca2525
+
+        &-recommendation
+            font-size: 15px
+            margin-bottom: 20px
+
+            &::before
+                content: 'Рекомендации: '
+                font-weight: bold
+                    
+                

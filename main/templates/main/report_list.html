@@ -1,0 +1,36 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Отчеты{% endblock %}
+
+{% block content %}
+
+<h3>Отчеты</h3>
+
+<div class="reports block">
+    <table class="table table-striped">
+        <thead>
+          <tr>
+              <th scope="col">Название анкеты</th>
+              <th scope="col">Дата прохождения</th>
+              <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for report in reports %}
+          <tr>
+            <td>{{ report.questionnaire_title }}</td>
+            <td>{{ report.done_date }}</td>
+            <td><a href="{% url 'report' report.id %}" class="btn btn-sm btn-info">Посмотреть результат</a></td>
+          </tr>
+          {% empty %}
+          <tr>
+              <td>Пусто...</td>
+              <td></td>
+              <td></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+  </table>
+</div>
+
+{% endblock %}

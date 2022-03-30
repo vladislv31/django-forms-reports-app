@@ -21,7 +21,8 @@
                 {% with request.resolver_match.url_name as url_name %}
                 <ul class="nav nav-pills">
                     {% if request.user.is_authenticated %}
-                    <li class="nav-item"><a href="{% url 'index' %}" class="nav-link {% if url_name == 'index' %}active{% endif %}">Главная</a></li>
+                    <li class="nav-item"><a href="{% url 'index' %}" class="nav-link {% if url_name == 'index' %}active{% endif %}">Анкеты</a></li>
+                    <li class="nav-item"><a href="{% url 'reports' %}" class="nav-link {% if url_name == 'reports' %}active{% endif %}">Отчеты</a></li>
                     {% if request.user.is_superuser %}
                     <li class="nav-item"><a href="{% url 'admin_panel:index' %}" class="nav-link">Админ-панель</a></li>
                     {% endif %}
@@ -42,5 +43,8 @@
     </div>
 
     <script src="{% static 'main/js/bootstrap.bundle.min.js' %}" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <script src="{% static 'main/js/jquery.min.js' %}"></script>
+    <script src="{% static 'main/js/main.js' %}"></script>
   </body>
 </html>

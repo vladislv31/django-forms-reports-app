@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Результат отчета{% endblock %}
+
+{% block content %}
+
+<h3>Результат отчета</h3>
+
+<div class="report">
+    <h5>{{ report.questionnaire_title }}</h5>
+    <p>Дата прохождения: {{ report.done_date }}</p>
+    {% for title, questions in report_fields.items %}
+        <div class="report__item block">
+            <h4>Мера "{{ title }}"</h4>
+            {% for question in questions %}
+                <div class="report__item-question report__item-question--{% if not question.is_provided %}not-{% endif %}provided">
+                    {{ question.question }}
+                </div>
+                {% if not question.is_provided %}
+                    <p class="report__item-recommendation">
+                        {{ question.recommendation }}
+                    </p>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

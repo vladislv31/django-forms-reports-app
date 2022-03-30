@@ -30,13 +30,16 @@
                         {% for question in field.questions %}
                             <div class="edit-questionnaire__item-field" data-field-id="{{ forloop.counter }}">
                                 <div class="edit-questionnaire__item-field__number">
-                                    <input type="text" class="form-control" name="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_number" value="{{ question.number }}" required>
+                                    <input type="text" class="form-control" placeholder="Номер" name="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_number" value="{{ question.number }}" required>
                                 </div>
                                 <div class="edit-questionnaire__item-field__question">
-                                    <input type="text" class="form-control" name="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question" value="{{ question.question_text }}" required>
+                                    <input type="text" class="form-control" placeholder="Вопрос" name="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question" value="{{ question.question_text }}" required>
                                 </div>
                                 <div class="edit-questionnaire__item-field__delete">
                                     <img src="{% static 'main/images/delete.svg' %}">
+                                </div>
+                                <div class="edit-questionnaire__item-field__recommendation">
+                                    <textarea name="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_recommendation" cols="30" placeholder="Рекоммендации" rows="5" class="form-control" required>{{ question.recommendation_text }}</textarea>
                                 </div>
                             </div>
                         {% endfor %}

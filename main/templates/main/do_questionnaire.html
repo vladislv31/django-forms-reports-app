@@ -9,26 +9,32 @@
 <h3>{{ questionnaire_type }}</h3>
 
 <div class="do-questionnaire">
-    <form action="">
+    <form action="POST" id="do-questionnaire-form">
+        {% csrf_token %}
         {% for field in questionnaire_fields %}
             <div class="do-questionnaire__item block">
                 <h5>{{ field.title }} ({{ field.designation }})</h5>
                 <hr>
                 {% for question in field.questions %}
                     <div class="do-questionnaire__item-field">
-                        <div class="do-questionnaire__item-field__number">{{field.designation}}. {{ question.number }}</div>
+                        <div class="do-questionnaire__item-field__number">{{ field.designation }}. {{ question.number }}</div>
                         <div class="do-questionnaire__item-field__question">{{ question.question_text }}</div>
                         <div class="do-questionnaire__item-field__input">
-                            <select class="form-select" aria-label="Default select example">
-                                <option selected disabled>Выберите вариант ответа</option>
-                                <option value="1">+</option>
-                                <option value="2">-</option>
+                            <select class="form-select" name="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_answer" required>
+                                <option selected disabled value="">Выберите вариант ответа</option>
+                                <option value="provided">Обеспечивается</option>
+                                <option value="not-provided">Не обеспечивается</option>
                             </select>
                         </div>
                     </div>
                 {% endfor %}
             </div>
         {% endfor %}
+        <button class="btn btn-primary" type="submit">Завершить анкету</button>
+        <div class="form-alerts">
+            <div class="alert alert-success alert-dismissible form-alerts__success">Анкета была отправлена!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+            <div class="alert alert-danger alert-dismissible form-alerts__error">Неизвестная ошибка!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+        </div>
     </form>
 </div>
 

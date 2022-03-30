@@ -24,6 +24,6 @@ def validate_questionnaire_fields(fields_json):
                 raise ValidationError('Not valid fields')
 
             question_keys = x.keys()
-            for y in ['number', 'question_text']:
+            for y in ['number', 'question_text', 'recommendation_text']:
                 if y not in question_keys:
                     raise ValidationError('Not valid fields')
