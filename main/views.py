@@ -129,7 +129,7 @@ class ReportDownloadView(LoginRequiredMixin, StartFormRequiredMixin, View):
 
         pdf = render_to_pdf('main/report_pdf.html', context)
 
-        filename = f'date.pdf'
+        filename = f'{report.done_date}.pdf'
         content = f'attachment; filename="{filename}"'
 
         response = HttpResponse(pdf, content_type='application/pdf')

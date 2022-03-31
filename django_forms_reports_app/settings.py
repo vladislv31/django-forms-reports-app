@@ -124,7 +124,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -154,7 +154,3 @@ CRONJOBS = [
 # Admin
 
 GENERAL_ADMIN_ID = 5
-
-# Dates
-
-DATETIME_FORMAT = '%d-%m-%Y %H:%M:%S'

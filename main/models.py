@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 import json
 
@@ -81,6 +82,10 @@ class Report(models.Model):
     questionnaire_title = models.CharField(max_length=100)
     report = models.TextField()
     done_date = models.DateTimeField(auto_now_add=True)
+
+    def get_done_date(self):
+        tz = timezone.get_default_timezone()
+        return self.done_date.astimezone(tz).strftime('%d.%m.%Y %H:%M')
 
 
 class UserOrganizationInfo(models.Model):

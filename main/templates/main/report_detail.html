@@ -8,7 +8,7 @@
 
 <div class="report">
     <h5>{{ report.questionnaire_title }}</h5>
-    <p>Дата прохождения: {{ report.done_date }}</p>
+    <p>Дата прохождения: {{ report.get_done_date }}</p>
     {% for title, questions in report_fields.items %}
         <div class="report__item block">
             <h4>Мера "{{ title }}"</h4>
