@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
+from django.core.exceptions import ValidationError
+
 from django.contrib.auth.models import User
 
 
@@ -30,3 +32,23 @@ class AdminCreateForm(UserCreationForm):
             'type': 'password'
         })
         self.fields['password2'].label = 'Повторите пароль'
+
+        # error message
+
+        self.error_messages['password_mismatch'] = 'Пароли не совпадают.'
+
+        print(self.error_messages.keys())
+        print(self.Meta.model)
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        if User.objects.filter(username=cleaned_data.get('username')).exists():
+            raise ValidationError('Пользователь с таким логином уже зарегистрирован!')
+
+        if len(cleaned_data.get('password1')) < 8:
+            raise ValidationError('Пароль должен содержать хотя бы 8 символов!')
+
+        if cleaned_data.get('password1').isdigit():
+            raise ValidationError('Пароль содержит только цифры!')
+
