@@ -18,6 +18,7 @@ from main.models import Questionnaire, UserOrganizationInfo
 
 import json
 
+from pprint import pprint
 
 class UserOrganizationInfoListView(ListView):
     model = UserOrganizationInfo
@@ -39,8 +40,10 @@ class QuestionnaireUpdateView(View):
             return Http404()
 
         questionnaire = Questionnaire.objects.get(type=type_slug)
+        template_path = 'admin_panel/questionnaire_edit.html' if questionnaire.type != 'determine' else \
+            'admin_panel/questionnaire_determine_edit.html'
 
-        return render(request, 'admin_panel/questionnaire_edit.html', {
+        return render(request, template_path, {
             'questionnaire_type': questionnaire.get_type_display(),
             'questionnaire_fields': json.loads(questionnaire.fields)
         })
@@ -53,44 +56,88 @@ class QuestionnaireUpdateView(View):
             data = request.POST
             fields = []
 
-            for title_key in filter(lambda x: x.endswith('_title'), data):
-                _id = title_key.replace('_title', '')
+            questionnaire = Questionnaire.objects.get(type=type_slug)
 
-                title = data[title_key]
+            if questionnaire.type != 'determine':
+                for title_key in filter(lambda x: x.endswith('_title'), data):
+                    _id = title_key.replace('_title', '')
 
-                designation_key = list(filter(lambda x: x == f'{_id}_designation', data))[0]
-                designation = data[designation_key]
+                    title = data[title_key]
 
-                questions = []
-                for number_key in filter(lambda x: x.startswith(_id) and x.endswith('_number'), data):
-                    inner_id = number_key.split('_')[1]
+                    designation_key = list(filter(lambda x: x == f'{_id}_designation', data))[0]
+                    designation = data[designation_key]
 
-                    number = data[number_key]
+                    questions = []
+                    for number_key in filter(lambda x: x.startswith(_id) and x.endswith('_number'), data):
+                        inner_id = number_key.split('_')[1]
 
-                    question_text_key = list(filter(lambda x: x == f'{_id}_{inner_id}_question', data))[0]
-                    question_text = data[question_text_key]
+                        number = data[number_key]
 
-                    recommendation_text_key = list(filter(lambda x: x == f'{_id}_{inner_id}_recommendation', data))[0]
-                    recommendation_text = data[recommendation_text_key]
+                        question_text_key = list(filter(lambda x: x == f'{_id}_{inner_id}_question', data))[0]
+                        question_text = data[question_text_key]
 
-                    questions.append({
-                        'number': number,
-                        'question_text': question_text,
-                        'recommendation_text': recommendation_text
+                        recommendation_text_key = list(filter(lambda x: x == f'{_id}_{inner_id}_recommendation', data))[0]
+                        recommendation_text = data[recommendation_text_key]
+
+                        questions.append({
+                            'number': number,
+                            'question_text': question_text,
+                            'recommendation_text': recommendation_text
+                        })
+
+                    fields.append({
+                        'title': title,
+                        'designation': designation,
+                        'questions': questions
+                    })
+            else:
+                for significance_key in filter(lambda x: x.endswith('_significance'), data):
+                    _id = significance_key.replace('_significance', '')
+
+                    significance = data[significance_key]
+
+                    questions = []
+                    for indicator_key in filter(lambda x: x.startswith(_id) and x.endswith('_indicator'), data):
+                        inner_id = indicator_key.split('_')[1]
+
+                        indicator = data[indicator_key]
+
+                        variants = []
+                        for title_key in filter(lambda x: x.startswith(f'{_id}_{inner_id}') and x.endswith('_title'),
+                                                data):
+                            variant_id = title_key.split('_')[2]
+
+                            title = data[title_key]
+
+                            first_cat_question = data[f'{_id}_{inner_id}_{variant_id}_first_cat_question']
+                            second_cat_question = data[f'{_id}_{inner_id}_{variant_id}_second_cat_question']
+                            third_cat_question = data[f'{_id}_{inner_id}_{variant_id}_third_cat_question']
+                            no_cat_question = data[f'{_id}_{inner_id}_{variant_id}_no_cat_question']
+
+                            variants.append({
+                                'title': title,
+                                'first_cat_question': first_cat_question,
+                                'second_cat_question': second_cat_question,
+                                'third_cat_question': third_cat_question,
+                                'no_cat_question': no_cat_question,
+                            })
+
+                        questions.append({
+                            'indicator': indicator,
+                            'variants': variants,
+                        })
+
+                    fields.append({
+                        'significance': significance,
+                        'questions': questions,
                     })
 
-                fields.append({
-                    'title': title,
-                    'designation': designation,
-                    'questions': questions
-                })
-
-            questionnaire = Questionnaire.objects.get(type=type_slug)
             questionnaire.fields = json.dumps(fields)
             questionnaire.full_clean()
 
             questionnaire.save()
         except Exception as err:
+            print(err)
             return HttpResponse(json.dumps({'status': 'error'}))
 
         return HttpResponse(json.dumps({'status': 'ok'}))

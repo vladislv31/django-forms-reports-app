@@ -1,0 +1,75 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %}{{ questionnaire_type }}{% endblock %}
+
+{% block content %}
+
+<h3>{{ questionnaire_type }}</h3>
+
+<div class="do-determine-questionnaire">
+    <form action="POST" id="do-determine-questionnaire-form">
+        {% csrf_token %}
+        {% for field in questionnaire_fields %}
+            <div class="do-determine-questionnaire__item block">
+                <h5>{{ field.significance }}</h5>
+                <hr>
+                {% for question in field.questions %}
+                    <div class="do-determine-questionnaire__item-field">
+                        <div class="do-determine-questionnaire__item-field__indicator">{{ question.indicator }}</div>
+                        {% if question.variants|length < 2 %}
+                            <div class="do-determine-questionnaire__item-field__input">
+                                <input type="radio" id="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question_1" name="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question" value="first_cat_question" required>
+                                <label for="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question_1">{{ question.variants.0.first_cat_question }}</label>
+                            </div>
+                            <div class="do-determine-questionnaire__item-field__input">
+                                <input type="radio" id="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question_2" name="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question" value="second_cat_question" required>
+                                <label for="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question_2">{{ question.variants.0.second_cat_question }}</label>
+                            </div>
+                            <div class="do-determine-questionnaire__item-field__input">
+                                <input type="radio" id="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question_3" name="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question" value="third_cat_question" required>
+                                <label for="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question_3">{{ question.variants.0.third_cat_question }}</label>
+                            </div>
+                            <div class="do-determine-questionnaire__item-field__input">
+                                <input type="radio" id="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question_4" name="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question" value="no_cat_question" required>
+                                <label for="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question_4">{{ question.variants.0.no_cat_question }}</label>
+                            </div>
+                        {% else %}
+                            {% for variant in question.variants %}
+                                <div class="do-determine-questionnaire__item-field__title">
+                                    {{ variant.title }}
+                                </div>
+                                <div class="do-determine-questionnaire__item-field__input-box">
+                                    <div class="do-determine-questionnaire__item-field__input">
+                                        <input type="radio" name="{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question" id="{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question_1" value="first_cat_question" required>
+                                        <label for="{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question_1">{{ variant.first_cat_question }}</label>
+                                    </div>
+                                    <div class="do-determine-questionnaire__item-field__input">
+                                        <input type="radio" name="{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question" id="{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question_2" value="second_cat_question" required>
+                                        <label for="{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question_2">{{ variant.second_cat_question }}</label>
+                                    </div>
+                                    <div class="do-determine-questionnaire__item-field__input">
+                                        <input type="radio" name="{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question" id="{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question_3" value="third_cat_question" required>
+                                        <label for="{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question_3">{{ variant.third_cat_question }}</label>
+                                    </div>
+                                    <div class="do-determine-questionnaire__item-field__input">
+                                        <input type="radio" name="{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question" id="{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question_4" value="no_cat_question" required>
+                                        <label for="{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}_question_4">{{ variant.no_cat_question }}</label>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <button class="btn btn-primary" type="submit">Завершить анкету</button>
+        <div class="form-alerts">
+            <div class="alert alert-success alert-dismissible form-alerts__success">Нужная анкета была определена как: <span></span>!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+            <div class="alert alert-danger alert-dismissible form-alerts__error">Неизвестная ошибка!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

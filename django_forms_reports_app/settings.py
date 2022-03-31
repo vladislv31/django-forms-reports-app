@@ -154,3 +154,7 @@ CRONJOBS = [
 # Admin
 
 GENERAL_ADMIN_ID = 5
+
+# Dates
+
+DATETIME_FORMAT = '%d-%m-%Y %H:%M:%S'

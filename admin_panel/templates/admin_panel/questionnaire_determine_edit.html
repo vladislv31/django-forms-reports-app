@@ -1,0 +1,61 @@
+{% extends 'admin_panel/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<h3>Редактировать анкету</h3>
+<p>{{ questionnaire_type }}</p>
+<div class="edit-determine-questionnaire">
+    <form action="" id="edit-determine-questionnaire-form">
+        {% csrf_token %}
+        <div class="edit-determine-questionnaire__items">
+            {% for field in questionnaire_fields %}
+                <div class="edit-determine-questionnaire__item" data-item-id="{{ forloop.counter }}">
+                    <p><label>Название значимости</label></p>
+                    <p><input type="text" class="form-control" name="{{ forloop.counter }}_significance" value="{{ field.significance }}" required></p>
+                    <a href="#" class="link link-danger edit-determine-questionnaire__delete-item">Удалить значимость</a>
+                    <hr>
+                    <div class="edit-determine-questionnaire__item-questions">
+                        {% for question in field.questions %}
+                            <div class="edit-determine-questionnaire__item-ques" data-subitem-id="{{ forloop.counter }}">
+                                <p><textarea class="form-control" name="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_indicator" placeholder="Показатель" required>{{ question.indicator }}</textarea></p>
+                                <a href="#" class="link-danger edit-determine-questionnaire__delete-question">Удалить вопрос</a>
+                                <p>Подвопросы:</p>
+                                <div class="edit-determine-questionnaire__item-variants">
+                                    {% for variant in question.variants %}
+                                        <div class="block edit-determine-questionnaire__item-question" data-question-id="{{ forloop.counter }}">
+                                            <label>Название вопроса:</label>
+                                            <textarea class="form-control" name="{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}_title">{{ variant.title }}</textarea>
+                                            <label>Для первой категории:</label>
+                                            <textarea class="form-control" name="{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}_first_cat_question" required>{{ variant.first_cat_question }}</textarea>
+                                            <label>Для второй категории:</label>
+                                            <textarea class="form-control" name="{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}_second_cat_question" required>{{ variant.second_cat_question }}</textarea>
+                                            <label>Для третьей категории:</label>
+                                            <textarea class="form-control" name="{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}_third_cat_question" required>{{ variant.third_cat_question }}</textarea>
+                                            <label>Для без категории:</label>
+                                            <textarea class="form-control" name="{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}_no_cat_question" required>{{ variant.no_cat_question }}</textarea>
+                                            <a href="#" class="link link-danger edit-determine-questionnaire__delete-subitem">Удалить подвопрос</a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <a href="#" class="link edit-determine-questionnaire__add-subitem">Добавить подвопрос</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <a href="#" class="link edit-determine-questionnaire__add-question">Добавить вопрос</a>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="edit-determine-questionnaire__add-item">
+            <a href="#" class="link link-info">Добавить значимость</a>
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <div class="form-alerts">
+            <div class="alert alert-success alert-dismissible form-alerts__success">Сохранено!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+            <div class="alert alert-danger alert-dismissible form-alerts__error">Неизвестная ошибка!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

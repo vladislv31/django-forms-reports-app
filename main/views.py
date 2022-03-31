@@ -30,7 +30,10 @@ class DoQuestionnaireView(LoginRequiredMixin, StartFormRequiredMixin, View):
 
         questionnaire = Questionnaire.objects.get(type=type_slug)
 
-        return render(request, 'main/do_questionnaire.html', {
+        template_path = 'main/do_questionnaire_determine.html' if questionnaire.type == 'determine'\
+            else 'main/do_questionnaire.html'
+
+        return render(request, template_path, {
             'questionnaire_type': questionnaire.get_type_display(),
             'questionnaire_fields': json.loads(questionnaire.fields)
         })
@@ -43,33 +46,45 @@ class DoQuestionnaireView(LoginRequiredMixin, StartFormRequiredMixin, View):
             data = request.POST
 
             questionnaire = Questionnaire.objects.get(type=type_slug)
-            fields = json.loads(questionnaire.fields)
 
-            report_fields = {}
+            if questionnaire.type != 'determine':
+                fields = json.loads(questionnaire.fields)
+                report_fields = {}
 
-            for answer_key in filter(lambda x: x.endswith('_answer'), data):
-                field_id, question_id, _ = answer_key.split('_')
-                field_id, question_id = int(field_id) - 1, int(question_id) - 1
+                for answer_key in filter(lambda x: x.endswith('_answer'), data):
+                    field_id, question_id, _ = answer_key.split('_')
+                    field_id, question_id = int(field_id) - 1, int(question_id) - 1
 
-                title = fields[field_id]['title']
-                if title not in report_fields.keys():
-                    report_fields[title] = []
+                    title = fields[field_id]['title']
+                    if title not in report_fields.keys():
+                        report_fields[title] = []
 
-                question = fields[field_id]['questions'][question_id]['question_text']
-                recommendation = fields[field_id]['questions'][question_id]['recommendation_text']
-                answer = data[answer_key]
+                    question = fields[field_id]['questions'][question_id]['question_text']
+                    recommendation = fields[field_id]['questions'][question_id]['recommendation_text']
+                    answer = data[answer_key]
 
-                report_fields[title].append({'is_provided': answer == 'provided', 'question': question,
-                                             'recommendation': recommendation})
+                    report_fields[title].append({'is_provided': answer == 'provided', 'question': question,
+                                                 'recommendation': recommendation})
 
-            report = Report(questionnaire_title=questionnaire.get_type_display(), user=request.user, report=json.dumps(
-                report_fields))
-            report.save()
+                report = Report(questionnaire_title=questionnaire.get_type_display(), user=request.user, report=json.dumps(
+                    report_fields))
+                report.save()
+
+                return HttpResponse(json.dumps({'status': 'ok', 'redirect': str(reverse_lazy('index'))}))
+            else:
+                determined_category = 'non'
+
+                if len(list(filter(lambda x: x == 'first_cat_question', data.values()))) > 0:
+                    determined_category = 'first'
+                elif len(list(filter(lambda x: x == 'second_cat_question', data.values()))) > 0:
+                    determined_category = 'second'
+                elif len(list(filter(lambda x: x == 'third_cat_question', data.values()))) > 0:
+                    determined_category = 'third'
+
+                return HttpResponse(json.dumps({'status': 'ok', 'determined_category': determined_category}))
         except Exception as err:
             print(err)
             return HttpResponse(json.dumps({'status': 'error'}))
-
-        return HttpResponse(json.dumps({'status': 'ok', 'redirect': str(reverse_lazy('index'))}))
 
 
 class QuestionnaireListView(LoginRequiredMixin, StartFormRequiredMixin, ListView):
