@@ -18,7 +18,8 @@ from main.models import Questionnaire, UserOrganizationInfo
 
 import json
 
-from pprint import pprint
+from parser import Parser
+
 
 class UserOrganizationInfoListView(ListView):
     model = UserOrganizationInfo
@@ -147,6 +148,25 @@ class ParsedDocumentListView(ListView):
     model = ParsedDocument
     template_name = 'admin_panel/parsed_document_list.html'
     context_object_name = 'parsed_documents'
+
+
+class ParseDocumentsView(View):
+
+    def get(self, request):
+        try:
+            parser = Parser()
+            docs = parser.parse()
+
+            ParsedDocument.objects.all().delete()
+
+            for doc in docs:
+                parsed_document = ParsedDocument(title=doc[0], link=doc[1])
+                parsed_document.save()
+        except Exception as err:
+            print(err)
+            return HttpResponse(json.dumps({'status': 'error'}))
+
+        return HttpResponse(json.dumps({'status': 'ok'}))
 
 
 class AdminListView(GeneralAdminRequired, ListView):

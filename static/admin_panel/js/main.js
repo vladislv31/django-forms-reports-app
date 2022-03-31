@@ -2,8 +2,36 @@ $(document).ready(function() {
 
     edit_questionnaire();
     edit_determine_questionnaire();
+    parsed_documents();
 
 });
+
+function parsed_documents() {
+
+    $('form#parse-documents-form').submit(function(e) {
+        e.preventDefault();
+
+        const th = $(this);
+
+        $('.form-alerts .form-alerts__success', th).css('display', 'none');
+        $('.form-alerts .form-alerts__error', th).css('display', 'none');
+
+        $.ajax({
+            type: 'GET',
+            url: th.attr('action')
+        }).done(function(json) {
+            const data = JSON.parse(json);
+
+            if (data?.status === 'ok') {
+                $('.form-alerts .form-alerts__success', th).css('display', 'block');
+            } else {
+                $('.form-alerts .form-alerts__error', th).css('display', 'block');
+            }
+        });
+
+    });
+
+}
 
 function edit_determine_questionnaire() {
 

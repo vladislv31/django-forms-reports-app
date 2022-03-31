@@ -6,6 +6,15 @@
 
 <h3>Спарсенные документы</h3>
 
+<br>
+<form action="{% url 'admin_panel:parse-documents' %}" method="GET" id="parse-documents-form">
+    <button class="btn btn-primary" type="submit">Спарсить документы</button>
+    <div class="form-alerts">
+        <div class="alert alert-success alert-dismissible form-alerts__success">Документы были успешно спарсены! Обновите страницу!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+        <div class="alert alert-danger alert-dismissible form-alerts__error">Неизвестная ошибка!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+    </div>
+</form>
+
 <div class="parsed-docs block">
     <ul class="list-group list-group-flush">
         {% for doc in parsed_documents %}
