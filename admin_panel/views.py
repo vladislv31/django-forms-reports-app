@@ -69,7 +69,7 @@ class QuestionnaireUpdateView(View):
                     designation = data[designation_key]
 
                     questions = []
-                    for number_key in filter(lambda x: x.startswith(_id) and x.endswith('_number'), data):
+                    for number_key in filter(lambda x: x.startswith(f'{_id}_') and x.endswith('_number'), data):
                         inner_id = number_key.split('_')[1]
 
                         number = data[number_key]
@@ -98,13 +98,13 @@ class QuestionnaireUpdateView(View):
                     significance = data[significance_key]
 
                     questions = []
-                    for indicator_key in filter(lambda x: x.startswith(_id) and x.endswith('_indicator'), data):
+                    for indicator_key in filter(lambda x: x.startswith(f'{_id}_') and x.endswith('_indicator'), data):
                         inner_id = indicator_key.split('_')[1]
 
                         indicator = data[indicator_key]
 
                         variants = []
-                        for title_key in filter(lambda x: x.startswith(f'{_id}_{inner_id}') and x.endswith('_title'),
+                        for title_key in filter(lambda x: x.startswith(f'{_id}_{inner_id}_') and x.endswith('_title'),
                                                 data):
                             variant_id = title_key.split('_')[2]
 
