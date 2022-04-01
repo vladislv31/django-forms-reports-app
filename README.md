@@ -10,4 +10,9 @@ DB_PORT        = '5432'
 ```
 
 ## specify crontab
+
+- disabled now
+
 ## specify general admin id
+
+- in settings.py: ```GENERAL_ADMIN_ID = 1```
