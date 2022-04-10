@@ -39,6 +39,8 @@
     <h3>Отчет по прохождению анкеты</h3>
     <p>{{ report.questionnaire_title }}</p>
     <p>Дата прохождения: {{ report.get_done_date }}</p>
+    <p>Отрасль предприятия: {{ report.industry }}</p>
+    <p>Тип используемых систем: {{ report.type_used_systems }}</p>
     {% for title, questions in report_fields.items %}
         <div>
             <h4>Мера "{{ title }}"</h4>

@@ -13,7 +13,7 @@ urlpatterns = [
     path('report/<int:pk>', ReportDetailView.as_view(), name='report'),
     path('report-download/<int:report_id>', ReportDownloadView.as_view(), name='report-download'),
 
-    path('start-form/', StartFormView.as_view(), name='start-form'),
+    # path('start-form/', StartFormView.as_view(), name='start-form'),
 
     path('login/', MainLoginView.as_view(), name='login'),
     path('register/', MainRegisterView.as_view(), name='register'),

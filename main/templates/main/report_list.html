@@ -11,6 +11,8 @@
         <thead>
           <tr>
               <th scope="col">Название анкеты</th>
+              <th>Отрасль предприятия</th>
+              <th>Тип используемых систем</th>
               <th scope="col">Дата прохождения</th>
               <th></th>
           </tr>
@@ -19,12 +21,16 @@
           {% for report in reports %}
           <tr>
             <td>{{ report.questionnaire_title }}</td>
+            <td>{{ report.industry }}</td>
+            <td>{{ report.type_used_systems }}</td>
             <td>{{ report.get_done_date }}</td>
             <td><a href="{% url 'report' report.id %}" class="btn btn-sm btn-info">Посмотреть результат</a></td>
           </tr>
           {% empty %}
           <tr>
               <td>Пусто...</td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
           </tr>

@@ -6,6 +6,30 @@ $(document).ready(function() {
 
 function do_questionnaire() {
 
+    $('form#do-questionnaire-form select[name="industry"]').change(function() {
+        const th = $(this);
+        const val = th.val();
+        const form = th.closest('form');
+
+        if (val == 'another') {
+            $('input[name="industry-another"]', form).css('display', 'block').attr('required', '');
+        } else {
+            $('input[name="industry-another"]', form).css('display', 'none').removeAttr('required');
+        }
+    });
+
+    $('form#do-questionnaire-form select[name="type_used_systems"]').change(function() {
+        const th = $(this);
+        const val = th.val();
+        const form = th.closest('form');
+
+        if (val == 'another') {
+            $('input[name="type_used_systems-another"]', form).css('display', 'block').attr('required', '');
+        } else {
+            $('input[name="type_used_systems-another"]', form).css('display', 'none').removeAttr('required');
+        }
+    });
+
     $('form#do-questionnaire-form').submit(function(e) {
         e.preventDefault();
 

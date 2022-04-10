@@ -11,6 +11,46 @@
 <div class="do-questionnaire">
     <form action="POST" id="do-questionnaire-form">
         {% csrf_token %}
+        <p><label for="">Отрасль предприятия</label></p>
+        <p>
+            <select class="form-select" name="industry" aria-label="Отрасль предприятия" required>
+                <option disabled selected value="">Отрасль предприятия</option>
+                <option value="Электроэнергетика">Электроэнергетика</option>
+                <option value="Нефтегазовая промышленность">Нефтегазовая промышленность</option>
+                <option value="Химическая промышленность">Химическая промышленность</option>
+                <option value="Металлургическая промышленность">Металлургическая промышленность</option>
+                <option value="Сельскохозяйственная отрасль">Сельскохозяйственная отрасль</option>
+                <option value="Автомобильная промышленность">Автомобильная промышленность</option>
+                <option value="Автоматизация инженерных систем">Автоматизация инженерных систем</option>
+                <option value="Транспортные системы (включая аэропорты)">Транспортные системы (включая аэропорты)</option>
+                <option value="Пищевая промышленность">Пищевая промышленность</option>
+                <option value="Жилищно-коммунальное хозяйство">Жилищно-коммунальное хозяйство</option>
+                <option value="another">Другое</option>
+            </select>
+            <p>
+                <input type="text" class="form-control" style="display: none;" name="industry-another" placeholder="Свой вариант">
+            </p>
+        </p>
+        <p><label for="">Тип используемых систем</label></p>
+        <p>
+            <select class="form-select" name="type_used_systems" required aria-label="Тип используемых систем">
+                <option disabled selected value="">Тип используемых систем</option>
+                <option value="Автоматизированные системы управления технологическими процессами (АСУ ТП)">Автоматизированные системы управления технологическими процессами (АСУ ТП)</option>
+                <option value="Распределенные системы управления (РСУ)">Распределенные системы управления (РСУ)</option>
+                <option value="Системы автоматизированного технологического управления (АСТУ)">Системы автоматизированного технологического управления (АСТУ)</option>
+                <option value="Системы релейной защиты и автоматики (РЗА)">Системы релейной защиты и автоматики (РЗА)</option>
+                <option value="Системы противоаварийной защиты (ПАЗ)">Системы противоаварийной защиты (ПАЗ)</option>
+                <option value="Системы телемеханики (СТМ)">Системы телемеханики (СТМ)</option>
+                <option value="Системы управления инженерными подсистемами">Системы управления инженерными подсистемами</option>
+                <option value="Робототехнические системы">Робототехнические системы</option>
+                <option value="Системы промышленного Интернета вещей (IIoT)">Системы промышленного Интернета вещей (IIoT)</option>
+                <option value="another">Другое</option>
+            </select>
+        </p>
+        <p>
+            <input type="text" class="form-control" style="display: none;" name="type_used_systems-another" placeholder="Свой вариант">
+        </p>
+        <br>
         {% for field in questionnaire_fields %}
             <div class="do-questionnaire__item block">
                 <h5>{{ field.title }} ({{ field.designation }})</h5>

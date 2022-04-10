@@ -15,14 +15,14 @@ from django.templatetags.static import static
 from .forms import MainLoginForm, MainRegisterForm, StartFormForm
 from .models import UserOrganizationInfo, Questionnaire, Report
 
-from .mixins import LoginRequiredMixin, StartFormRequiredMixin
+from .mixins import LoginRequiredMixin
 
 from .utils import render_to_pdf
 
 import json
 
 
-class DoQuestionnaireView(LoginRequiredMixin, StartFormRequiredMixin, View):
+class DoQuestionnaireView(LoginRequiredMixin, View):
 
     def get(self, request, type_slug):
         if not Questionnaire.objects.filter(type=type_slug).exists():
@@ -66,9 +66,15 @@ class DoQuestionnaireView(LoginRequiredMixin, StartFormRequiredMixin, View):
                     report_fields[title].append({'is_provided': answer == 'provided', 'question': question,
                                                  'recommendation': recommendation})
 
+                industry = data['industry'] if data['industry'] != 'another' else data['industry-another']
+                type_used_systems = data['type_used_systems'] if data['type_used_systems'] != 'another' else data['type_used_systems-another']
+
                 report = Report(questionnaire_title=questionnaire.get_type_display(), user=request.user, report=json.dumps(
-                    report_fields))
+                    report_fields), industry=industry, type_used_systems=type_used_systems)
                 report.save()
+
+                userOrganizationInfo = UserOrganizationInfo(user=request.user, questionnaire_title=questionnaire.get_type_display(), industry=industry, type_used_systems=type_used_systems)
+                userOrganizationInfo.save()
 
                 return HttpResponse(json.dumps({'status': 'ok', 'redirect': str(reverse_lazy('index'))}))
             else:
@@ -87,14 +93,14 @@ class DoQuestionnaireView(LoginRequiredMixin, StartFormRequiredMixin, View):
             return HttpResponse(json.dumps({'status': 'error'}))
 
 
-class QuestionnaireListView(LoginRequiredMixin, StartFormRequiredMixin, ListView):
+class QuestionnaireListView(LoginRequiredMixin, ListView):
     model = Questionnaire
     template_name = 'main/index.html'
     context_object_name = 'questionnaires'
     ordering = ['type']
 
 
-class ReportListView(LoginRequiredMixin, StartFormRequiredMixin, ListView):
+class ReportListView(LoginRequiredMixin, ListView):
     model = Report
     template_name = 'main/report_list.html'
     context_object_name = 'reports'
@@ -107,7 +113,7 @@ class ReportListView(LoginRequiredMixin, StartFormRequiredMixin, ListView):
         return context
 
 
-class ReportDownloadView(LoginRequiredMixin, StartFormRequiredMixin, View):
+class ReportDownloadView(LoginRequiredMixin, View):
 
     def get(self, request, report_id):
         if not Report.objects.filter(id=report_id).exists():
@@ -138,7 +144,7 @@ class ReportDownloadView(LoginRequiredMixin, StartFormRequiredMixin, View):
         return response
 
 
-class ReportDetailView(LoginRequiredMixin, StartFormRequiredMixin, DetailView):
+class ReportDetailView(LoginRequiredMixin, DetailView):
     model = Report
     template_name = 'main/report_detail.html'
     context_object_name = 'report'

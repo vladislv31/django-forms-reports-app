@@ -3,8 +3,42 @@ $(document).ready(function() {
     edit_questionnaire();
     edit_determine_questionnaire();
     parsed_documents();
+    start_forms();
 
 });
+
+function start_forms() {
+
+    $('.start-forms select[name="industry"], .start-forms select[name="type_used_systems"]').change(function() {
+        
+        const industry_val =  $('.start-forms select[name="industry"]').val();
+        const systems_val = $('.start-forms select[name="type_used_systems"]').val();
+
+        const table = $('.start-forms table');
+
+        if (industry_val == 'all' && systems_val == 'all') {
+            $('tbody tr', table).css('display', 'table-row');
+        } else if (industry_val == 'all') {
+            for (const row of $('tbody tr', table)) {
+                if ($('td[td-name="type_used_systems"]', $(row)).text() == systems_val) { $(row).css('display', 'table-row'); }
+                else $(row).css('display', 'none');
+            }
+        } else if (systems_val == 'all') {
+            for (const row of $('tbody tr', table)) {
+                if ($('td[td-name="industry"]', $(row)).text() == industry_val) { $(row).css('display', 'table-row'); }
+                else $(row).css('display', 'none');
+            }
+        } else {
+            for (const row of $('tbody tr', table)) {
+                if ($('td[td-name="industry"]', $(row)).text() == industry_val && $('td[td-name="type_used_systems"]', $(row)).text() == systems_val) { $(row).css('display', 'table-row'); }
+                else $(row).css('display', 'none');
+            }
+        } 
+        
+
+    });
+
+}
 
 function parsed_documents() {
 

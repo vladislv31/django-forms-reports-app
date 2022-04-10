@@ -81,7 +81,12 @@ class Report(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     questionnaire_title = models.CharField(max_length=100)
     report = models.TextField()
+
+    industry = models.CharField(max_length=100)
+    type_used_systems = models.CharField(max_length=100)
+
     done_date = models.DateTimeField(auto_now_add=True)
+
 
     def get_done_date(self):
         tz = timezone.get_default_timezone()
@@ -89,9 +94,17 @@ class Report(models.Model):
 
 
 class UserOrganizationInfo(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     industry = models.CharField(max_length=100)
     type_used_systems = models.CharField(max_length=100)
 
+    questionnaire_title = models.CharField(max_length=100)
+    done_date = models.DateTimeField(auto_now_add=True)
+
+    def get_done_date(self):
+        tz = timezone.get_default_timezone()
+        return self.done_date.astimezone(tz).strftime('%d.%m.%Y %H:%M')
+
     def __str__(self):
         return f'{str(self.user).capitalize()}s organization info'
+

@@ -26,6 +26,16 @@ class UserOrganizationInfoListView(ListView):
     template_name = 'admin_panel/start_forms_list.html'
     context_object_name = 'start_forms'
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+
+        context['industries'] = list(set([sf.industry for sf in context['start_forms']]))
+        context['types_used_systems'] = list(set([sf.type_used_systems for sf in context['start_forms']]))
+
+        return context
+
+
+
 
 class QuestionnaireListView(ListView):
     model = Questionnaire

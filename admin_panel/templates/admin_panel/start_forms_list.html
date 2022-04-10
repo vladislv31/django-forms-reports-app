@@ -7,24 +7,47 @@
 <h3>Стартовые анкеты</h3>
 
 <div class="start-forms">
+  <div>
+    <p><strong>Сортировка:</strong></p>
+    <p><label for="">Отрасль предприятия</label></p>
+    <p><select class="form-select" name="industry" aria-label="Отрасль предприятия" required>
+      <option selected value="all">Все</option>
+      {% for industry in industries %}
+      <option value="{{ industry }}">{{ industry }}</option>
+      {% endfor %}
+    </select></p>
+    <p><label for="">Тип используемых систем</label></p>
+    <p><select class="form-select" name="type_used_systems" required aria-label="Тип используемых систем">
+      <option selected value="all">Все</option>
+      {% for type_used_systems in types_used_systems %}
+      <option value="{{ type_used_systems }}">{{ type_used_systems }}</option>
+      {% endfor %}
+    </select></p>
+  </div>
   <table class="table table-striped">
     <thead>
       <tr>
         <th scope="col">Пользователь</th>
+        <th scope="col">Название анкеты</th>
         <th scope="col">Отрасль предприятия</th>
         <th scope="col">Тип используемых систем</th>
+        <th scope="col">Дата прохождения</th>
       </tr>
     </thead>
     <tbody>
       {% for start_form in start_forms %}
       <tr>
         <td>{{ start_form.user }}</td>
-        <td>{{ start_form.industry }}</td>
-        <td>{{ start_form.type_used_systems }}</td>
+        <td>{{ start_form.questionnaire_title }}</td>
+        <td td-name="industry">{{ start_form.industry }}</td>
+        <td td-name="type_used_systems">{{ start_form.type_used_systems }}</td>
+        <td>{{ start_form.get_done_date }}</td>
       </tr>
       {% empty %}
       <tr>
           <td>Пусто...</td>
+          <td></td>
+          <td></td>
           <td></td>
           <td></td>
       </tr>
