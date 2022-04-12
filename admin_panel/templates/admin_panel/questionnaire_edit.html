@@ -7,11 +7,12 @@
 {% block content %}
 
 <h3>Редактировать анкету</h3>
-<p>{{ questionnaire_type }}</p>
 
 <div class="edit-questionnaire">
     <form action="" id="edit-questionnaire-form">
         {% csrf_token %}
+        <p><label>Название анкеты:</label></p>
+        <p><input class="form-control" type="text" name="type" value="{{ questionnaire_type }}" required></p>
         <div class="edit-questionnaire__items">
             {% for field in questionnaire_fields %}
                 <div class="edit-questionnaire__item block" data-item-id="{{ forloop.counter }}">

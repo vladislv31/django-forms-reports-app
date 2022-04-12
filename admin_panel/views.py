@@ -41,35 +41,38 @@ class QuestionnaireListView(ListView):
     model = Questionnaire
     template_name = 'admin_panel/questionnaires.html'
     context_object_name = 'questionnaires'
-    ordering = ['type']
+    ordering = ['mode']
 
 
 class QuestionnaireUpdateView(View):
 
-    def get(self, request, type_slug):
-        if not Questionnaire.objects.all().filter(type=type_slug).exists():
+    def get(self, request, pk):
+        if not Questionnaire.objects.all().filter(id=pk).exists():
             return Http404()
 
-        questionnaire = Questionnaire.objects.get(type=type_slug)
-        template_path = 'admin_panel/questionnaire_edit.html' if questionnaire.type != 'determine' else \
+        questionnaire = Questionnaire.objects.get(id=pk)
+        template_path = 'admin_panel/questionnaire_edit.html' if questionnaire.mode != 'determine' else \
             'admin_panel/questionnaire_determine_edit.html'
 
         return render(request, template_path, {
-            'questionnaire_type': questionnaire.get_type_display(),
+            'questionnaire_type': questionnaire.type,
             'questionnaire_fields': json.loads(questionnaire.fields)
         })
 
-    def post(self, request, type_slug):
-        if not Questionnaire.objects.all().filter(type=type_slug).exists():
+    def post(self, request, pk):
+        if not Questionnaire.objects.all().filter(id=pk).exists():
             raise Http404()
 
         try:
             data = request.POST
             fields = []
 
-            questionnaire = Questionnaire.objects.get(type=type_slug)
+            questionnaire = Questionnaire.objects.get(id=pk)
+            questionnaire_type = questionnaire.type
 
             if questionnaire.type != 'determine':
+                questionnaire_type = data['type']
+
                 for title_key in filter(lambda x: x.endswith('_title'), data):
                     _id = title_key.replace('_title', '')
 
@@ -143,6 +146,7 @@ class QuestionnaireUpdateView(View):
                         'questions': questions,
                     })
 
+            questionnaire.type = questionnaire_type
             questionnaire.fields = json.dumps(fields)
             questionnaire.full_clean()
 

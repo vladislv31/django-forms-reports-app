@@ -14,7 +14,7 @@ urlpatterns = [
     path('parse-documents/', ParseDocumentsView.as_view(), name='parse-documents'),
 
     path('questionnaires/', QuestionnaireListView.as_view(), name='questionnaires'),
-    path('edit-questionnaire/<slug:type_slug>', QuestionnaireUpdateView.as_view(), name='edit-questionnaire'),
+    path('edit-questionnaire/<int:pk>', QuestionnaireUpdateView.as_view(), name='edit-questionnaire'),
 
     path('admins/', AdminListView.as_view(), name='admins'),
     path('create-admin/', AdminCreateView.as_view(), name='create-admin'),

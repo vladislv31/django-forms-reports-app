@@ -15,8 +15,8 @@
             <div class="card questionnaires__item">
                 <div class="card-body">
                     <img src="{% static 'main/images/questionnaire.svg' %}">
-                    <h5 class="card-title">{{ questionnaire.get_type_display }}</h5>
-                    <a href="{% url 'do-questionnaire' questionnaire.type %}" class="btn btn-primary">Перейти</a>
+                    <h5 class="card-title">{{ questionnaire.type }}</h5>
+                    <a href="{% url 'do-questionnaire' questionnaire.id %}" class="btn btn-primary">Перейти</a>
                 </div>
             </div>
         </div>

@@ -15,12 +15,13 @@ class Questionnaire(models.Model):
         ('without', 'Анкета без категории значимости'),
         ('determine', 'Анкета определения категории значимости'),
     )
-    type = models.CharField(max_length=200, choices=TYPE_CHOICES, unique=True)
+    type = models.CharField(max_length=200, unique=True)
+    mode = models.CharField(max_length=200, choices=(('determine', 'Анкета определения категории'), ('simple', 'Обычная анкета')), default='simple')
 
     fields = models.TextField()
 
     def __str__(self):
-        return f'{self.get_type_display()}'
+        return f'{self.type}'
 
     def clean(self):
         try:

@@ -15,12 +15,21 @@
             <div class="card questionnaires__item">
                 <div class="card-body">
                     <img src="{% static 'main/images/questionnaire.svg' %}">
-                    <h5 class="card-title">{{ questionnaire.get_type_display }}</h5>
-                    <a href="{% url 'admin_panel:edit-questionnaire' questionnaire.type %}" class="btn btn-primary">Редактировать</a>
+                    <h5 class="card-title">{{ questionnaire.type }}</h5>
+                    <a href="{% url 'admin_panel:edit-questionnaire' questionnaire.id %}" class="btn btn-primary">Редактировать</a>
                 </div>
             </div>
         </div>
         {% endfor %}
+        <div class="col-sm-3">
+            <div class="card questionnaires__item">
+                <div class="card-body">
+                    <img src="{% static 'main/images/plus.svg' %}">
+                    <h5 class="card-title">Добавить новую<br> анкету</h5>
+                    <a href="" class="btn btn-outline-primary">Добавить анкету</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
