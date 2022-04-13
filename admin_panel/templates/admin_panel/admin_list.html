@@ -1,18 +1,18 @@
 {% extends 'admin_panel/base.html' %}
 
-{% block title %}Список админов{% endblock %}
+{% block title %}Список администраторов{% endblock %}
 
 {% block content %}
 
-<h3>Список админов</h3>
+<h3>Список администраторов</h3>
 
 <div class="admins-table block">
-    <a href="{% url 'admin_panel:create-admin' %}" class="btn btn-primary">Создать админа</a>
+    <a href="{% url 'admin_panel:create-admin' %}" class="btn btn-primary">Создать администратора</a>
     <hr>
     <table class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">Юзернейм</th>
+            <th scope="col">Логин</th>
             <th scope="col"></th>
           </tr>
         </thead>

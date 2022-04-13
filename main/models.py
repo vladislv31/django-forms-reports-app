@@ -17,6 +17,8 @@ class Questionnaire(models.Model):
     )
     type = models.CharField(max_length=200, unique=True)
     mode = models.CharField(max_length=200, choices=(('determine', 'Анкета определения категории'), ('simple', 'Обычная анкета')), default='simple')
+    order = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
 
     fields = models.TextField()
 
@@ -27,7 +29,7 @@ class Questionnaire(models.Model):
         try:
             fields = json.loads(self.fields)
 
-            if self.type != 'determine':
+            if self.mode != 'determine':
                 for field in fields:
                     field_keys = field.keys()
 
@@ -43,7 +45,7 @@ class Questionnaire(models.Model):
                             raise ValidationError('Not valid fields')
 
                         question_keys = x.keys()
-                        for y in ['number', 'question_text', 'recommendation_text']:
+                        for y in ['number', 'question_text', 'recommendation_text', 'criterion_text']:
                             if y not in question_keys:
                                 raise ValidationError('Not valid fields')
             else:

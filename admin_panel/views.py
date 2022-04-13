@@ -41,7 +41,75 @@ class QuestionnaireListView(ListView):
     model = Questionnaire
     template_name = 'admin_panel/questionnaires.html'
     context_object_name = 'questionnaires'
-    ordering = ['mode']
+    ordering = ['order']
+
+
+class QuestionnaireCreateView(View):
+
+    def get(self, request):
+        return render(request, 'admin_panel/create_questionnaire.html')
+
+    def post(self, request):
+
+        try:
+            data = request.POST
+            fields = []
+
+            questionnaire_type = data['type']
+            questionnaire_order = data['order']
+
+            for title_key in filter(lambda x: x.endswith('_title'), data):
+                _id = title_key.replace('_title', '')
+
+                title = data[title_key]
+
+                designation_key = list(filter(lambda x: x == f'{_id}_designation', data))[0]
+                designation = data[designation_key]
+
+                questions = []
+                for number_key in filter(lambda x: x.startswith(f'{_id}_') and x.endswith('_number'), data):
+                    inner_id = number_key.split('_')[1]
+
+                    number = data[number_key]
+
+                    question_text_key = list(filter(lambda x: x == f'{_id}_{inner_id}_question', data))[0]
+                    question_text = data[question_text_key]
+
+                    recommendation_text_key = list(filter(lambda x: x == f'{_id}_{inner_id}_recommendation', data))[0]
+                    recommendation_text = data[recommendation_text_key]
+
+                    criterion_text_key = list(filter(lambda x: x == f'{_id}_{inner_id}_criterion', data))[0]
+                    criterion_text = data[criterion_text_key]
+
+                    questions.append({
+                        'number': number,
+                        'question_text': question_text,
+                        'recommendation_text': recommendation_text,
+                        'criterion_text': criterion_text
+                    })
+
+                fields.append({
+                    'title': title,
+                    'designation': designation,
+                    'questions': questions
+                })
+
+            questionnaire = Questionnaire(type=questionnaire_type, fields=json.dumps(fields), order=questionnaire_order)
+            questionnaire.full_clean()
+
+            questionnaire.save()
+        except Exception as err:
+            print(err)
+            return HttpResponse(json.dumps({'status': 'error'}))
+
+        return HttpResponse(json.dumps({'status': 'ok', 'redirect': str(reverse_lazy('admin_panel:questionnaires'))}))
+
+
+class QuestionnaireDeleteView(DeleteView):
+    model = Questionnaire
+    template_name = 'admin_panel/questionnaire_delete.html'
+    context_object_name = 'questionnaire'
+    success_url = reverse_lazy('admin_panel:questionnaires')
 
 
 class QuestionnaireUpdateView(View):
@@ -56,6 +124,9 @@ class QuestionnaireUpdateView(View):
 
         return render(request, template_path, {
             'questionnaire_type': questionnaire.type,
+            'questionnaire_id': questionnaire.id,
+            'questionnaire_is_active': questionnaire.is_active,
+            'questionnaire_order': questionnaire.order, 
             'questionnaire_fields': json.loads(questionnaire.fields)
         })
 
@@ -69,9 +140,17 @@ class QuestionnaireUpdateView(View):
 
             questionnaire = Questionnaire.objects.get(id=pk)
             questionnaire_type = questionnaire.type
+            questionnaire_order = questionnaire.order
+            questionnaire_is_active = questionnaire.is_active
 
-            if questionnaire.type != 'determine':
+            if questionnaire.mode != 'determine':
                 questionnaire_type = data['type']
+                questionnaire_order = data['order']
+
+                if 'is_active' in data.keys():
+                    questionnaire_is_active = True
+                else:
+                    questionnaire_is_active = False
 
                 for title_key in filter(lambda x: x.endswith('_title'), data):
                     _id = title_key.replace('_title', '')
@@ -93,10 +172,14 @@ class QuestionnaireUpdateView(View):
                         recommendation_text_key = list(filter(lambda x: x == f'{_id}_{inner_id}_recommendation', data))[0]
                         recommendation_text = data[recommendation_text_key]
 
+                        criterion_text_key = list(filter(lambda x: x == f'{_id}_{inner_id}_criterion', data))[0]
+                        criterion_text = data[criterion_text_key]
+
                         questions.append({
                             'number': number,
                             'question_text': question_text,
-                            'recommendation_text': recommendation_text
+                            'recommendation_text': recommendation_text,
+                            'criterion_text': criterion_text
                         })
 
                     fields.append({
@@ -147,6 +230,8 @@ class QuestionnaireUpdateView(View):
                     })
 
             questionnaire.type = questionnaire_type
+            questionnaire.order = questionnaire_order
+            questionnaire.is_active = questionnaire_is_active
             questionnaire.fields = json.dumps(fields)
             questionnaire.full_clean()
 

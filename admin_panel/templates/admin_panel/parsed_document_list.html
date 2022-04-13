@@ -1,16 +1,16 @@
 {% extends 'admin_panel/base.html' %}
 
-{% block title %}Спарсенные документы{% endblock %}
+{% block title %}Обновления в документах{% endblock %}
 
 {% block content %}
 
-<h3>Спарсенные документы</h3>
+<h3>Обвновления в документах</h3>
 
 <br>
 <form action="{% url 'admin_panel:parse-documents' %}" method="GET" id="parse-documents-form">
-    <button class="btn btn-primary" type="submit">Спарсить документы</button>
+    <button class="btn btn-primary" type="submit">Обновить документы</button>
     <div class="form-alerts">
-        <div class="alert alert-success alert-dismissible form-alerts__success">Документы были успешно спарсены! Обновите страницу!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+        <div class="alert alert-success alert-dismissible form-alerts__success">Документы были успешно обновлены! Перезагрузите страницу!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
         <div class="alert alert-danger alert-dismissible form-alerts__error">Неизвестная ошибка!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
     </div>
 </form>

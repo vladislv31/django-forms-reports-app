@@ -13,6 +13,21 @@
         {% csrf_token %}
         <p><label>Название анкеты:</label></p>
         <p><input class="form-control" type="text" name="type" value="{{ questionnaire_type }}" required></p>
+        <p><label>Тип анкеты:</label></p>
+        <p><select class="form-select" name="order" required>
+            <option value="1" {% if questionnaire_order == 1 %} selected {% endif %}>Первая категория значимости</option>
+            <option value="2" {% if questionnaire_order == 2 %} selected {% endif %}>Вторая категория значимости</option>
+            <option value="3" {% if questionnaire_order == 3 %} selected {% endif %}>Третья категория значимости</option>
+            <option value="4" {% if questionnaire_order == 4 %} selected {% endif %}>Без категории значимости</option>
+            <option value="5" {% if questionnaire_order == 5 %} selected {% endif %}>Дополнительная анкета</option>
+        </select></p>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="is_active" value="active" id="flexCheckDefault" {% if questionnaire_is_active %} checked {% endif %}>
+          <label class="form-check-label" for="flexCheckDefault">
+            Анкета активна
+          </label>
+        </div>
+        <br>
         <div class="edit-questionnaire__items">
             {% for field in questionnaire_fields %}
                 <div class="edit-questionnaire__item block" data-item-id="{{ forloop.counter }}">
@@ -43,6 +58,7 @@
                                 </div>
                                 <div class="edit-questionnaire__item-field__recommendation">
                                     <textarea name="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_recommendation" cols="30" placeholder="Рекоммендации" rows="5" class="form-control" required>{{ question.recommendation_text }}</textarea>
+                                    <textarea name="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_criterion" cols="30" placeholder="Критерий оценимаемости" rows="5" class="form-control">{{ question.criterion_text }}</textarea>
                                 </div>
                             </div>
                         {% endfor %}
@@ -58,6 +74,7 @@
             <a href="#" class="link-info">Добавить меру обеспечения безопасности</a>
         </div>
         <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a href="{% url 'admin_panel:delete-questionnaire' questionnaire_id %}" class="btn btn-danger">Удалить</a>
         <div class="form-alerts">
             <div class="alert alert-success alert-dismissible form-alerts__success">Сохранено!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
             <div class="alert alert-danger alert-dismissible form-alerts__error">Неизвестная ошибка!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>

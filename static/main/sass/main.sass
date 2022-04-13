@@ -45,6 +45,7 @@ body
         &-field
             display: flex
             align-items: center
+            flex-wrap: wrap
             margin-bottom: 15px
             padding-bottom: 15px
             border-bottom: 1px solid #dee2e6
@@ -57,6 +58,13 @@ body
 
             &__question
                 flex: 1
+
+            &__criterion
+                margin-top: 15px
+                flex-basis: 100%
+
+                &-text
+                    display: none
             
             &__input
                 flex-basis: 300px
@@ -116,11 +124,11 @@ body
 .parsed-docs
     margin-top: 30px
 
-.edit-questionnaire
+.edit-questionnaire, .create-questionnaire
     margin-top: 30px
 
     &__add-item
-        margin-bottom: 40px
+        margin-bottom: 20px
 
     &__item
         margin-bottom: 30px
@@ -167,6 +175,9 @@ body
             &__recommendation
                 flex-basis: 100%
                 margin-top: 15px
+
+                textarea
+                    margin-bottom: 15px
 
 .admins-table
     margin-top: 30px

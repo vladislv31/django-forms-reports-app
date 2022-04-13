@@ -6,6 +6,13 @@ $(document).ready(function() {
 
 function do_questionnaire() {
 
+    $('.do-questionnaire__item-field__criterion-show').click(function() {
+        const th = $(this);
+        const criterion = th.closest('.do-questionnaire__item-field__criterion');
+
+        $('.do-questionnaire__item-field__criterion-text', criterion).fadeToggle(0);
+    });
+
     $('form#do-questionnaire-form select[name="industry"]').change(function() {
         const th = $(this);
         const val = th.val();
