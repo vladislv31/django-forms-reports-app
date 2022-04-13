@@ -66,6 +66,15 @@
                                 <option value="not-provided">Не обеспечивается</option>
                             </select>
                         </div>
+                        <div class="do-questionnaire__item-field__criterion">
+                            {% if question.criterion_text|length > 0 %}
+                            <div class="do-questionnaire__item-field__criterion-show btn btn-sm btn-outline-info">Критерий оценимаемости</div>
+                            <div class="do-questionnaire__item-field__criterion-text">
+                                <br><span><strong>Критерий оцениваемости:</strong></span>
+                                <p style="margin-top: 5px">{{ question.criterion_text }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
                     </div>
                 {% endfor %}
             </div>

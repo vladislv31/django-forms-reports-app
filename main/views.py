@@ -30,6 +30,9 @@ class DoQuestionnaireView(LoginRequiredMixin, View):
 
         questionnaire = Questionnaire.objects.get(id=pk)
 
+        if not questionnaire.is_active:
+            return redirect('index')
+
         template_path = 'main/do_questionnaire_determine.html' if questionnaire.mode == 'determine'\
             else 'main/do_questionnaire.html'
 
@@ -46,8 +49,11 @@ class DoQuestionnaireView(LoginRequiredMixin, View):
             data = request.POST
 
             questionnaire = Questionnaire.objects.get(id=pk)
+                
+            if not questionnaire.is_active:
+                return redirect('index')
 
-            if questionnaire.type != 'determine':
+            if questionnaire.mode != 'determine':
                 fields = json.loads(questionnaire.fields)
                 report_fields = {}
 
@@ -97,7 +103,14 @@ class QuestionnaireListView(LoginRequiredMixin, ListView):
     model = Questionnaire
     template_name = 'main/index.html'
     context_object_name = 'questionnaires'
-    ordering = ['mode']
+    ordering = ['order']
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['questionnaires'] = context['questionnaires'].filter(is_active=True)
+
+        return context
+
 
 
 class ReportListView(LoginRequiredMixin, ListView):

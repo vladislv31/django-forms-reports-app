@@ -1,0 +1,17 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Удалить анкету{% endblock %}
+
+{% block content %}
+
+<h3>Удалить анкету</h3>
+
+<div class="delete-questionnaire">
+    <form method="POST">
+        {% csrf_token %}
+        <p>Вы уверены, что хотите удалить анкету с название <b>{{ questionnaire.type }}</b>?</p>
+        <button type="submit" class="btn btn-danger">Удалить</button>
+    </form>
+</div>
+
+{% endblock %}

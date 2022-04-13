@@ -1,0 +1,38 @@
+{% extends 'admin_panel/base.html' %}
+
+{% load static %}
+
+{% block title %}Создать новую анкету{% endblock %}
+
+{% block content %}
+
+<h3>Создать новую анкету</h3>
+
+<div class="create-questionnaire">
+    <form action="" id="create-questionnaire-form">
+        {% csrf_token %}
+        <p><label>Название анкеты:</label></p>
+        <p><input class="form-control" type="text" name="type" value="" required></p>
+        <p><label>Тип анкеты:</label></p>
+        <p><select class="form-select" name="order" required>
+            <option value="" selected disabled>Укажите тип анкеты</option>
+            <option value="1">Первая категория значимости</option>
+            <option value="2">Вторая категория значимости</option>
+            <option value="3">Третья категория значимости</option>
+            <option value="4">Без категории значимости</option>
+            <option value="5">Дополнительная анкета</option>
+        </select></p>
+        <div class="create-questionnaire__items">
+        </div>
+        <div class="create-questionnaire__add-item">
+            <a href="#" class="link-info">Добавить меру обеспечения безопасности</a>
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <div class="form-alerts">
+            <div class="alert alert-success alert-dismissible form-alerts__success">Сохранено!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+            <div class="alert alert-danger alert-dismissible form-alerts__error">Неизвестная ошибка!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
