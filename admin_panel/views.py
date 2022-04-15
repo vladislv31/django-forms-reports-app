@@ -50,7 +50,6 @@ class QuestionnaireCreateView(View):
         return render(request, 'admin_panel/create_questionnaire.html')
 
     def post(self, request):
-
         try:
             data = request.POST
             fields = []
@@ -93,6 +92,9 @@ class QuestionnaireCreateView(View):
                     'designation': designation,
                     'questions': questions
                 })
+
+            if Questionnaire.objects.all().filter(type=questionnaire_type).exists():
+                return HttpResponse(json.dumps({'status': 'error', 'message': 'Анкета с таким именем уже существует!'}))
 
             questionnaire = Questionnaire(type=questionnaire_type, fields=json.dumps(fields), order=questionnaire_order)
             questionnaire.full_clean()

@@ -35,7 +35,7 @@
                         <img src="{% static 'main/images/delete.svg' %}">
                     </div>
                     <div class="edit-questionnaire__item-title">
-                        <label class="form-label">Название меры</label>
+                        <label class="form-label">Мера</label>
                         <input type="text" class="form-control" name="{{ forloop.counter }}_title" value="{{ field.title }}" required>
                     </div>
                     <div class="edit-questionnaire__item-designation">
@@ -58,7 +58,7 @@
                                 </div>
                                 <div class="edit-questionnaire__item-field__recommendation">
                                     <textarea name="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_recommendation" cols="30" placeholder="Рекоммендации" rows="5" class="form-control" required>{{ question.recommendation_text }}</textarea>
-                                    <textarea name="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_criterion" cols="30" placeholder="Критерий оценимаемости" rows="5" class="form-control">{{ question.criterion_text }}</textarea>
+                                    <textarea name="{{ forloop.parentloop.counter }}_{{ forloop.counter }}_criterion" cols="30" placeholder="Критерий оценки" rows="5" class="form-control">{{ question.criterion_text }}</textarea>
                                 </div>
                             </div>
                         {% endfor %}

@@ -27,7 +27,7 @@
                     {% if request.user.is_general_admin %}
                     <li class="nav-item"><a href="{% url 'admin_panel:admins' %}" class="nav-link {% if url_name == 'admins' %}active{% endif %}">Администраторы</a></li>
                     {% endif %}
-                    <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Вернуться на сайт</a></li>
+                    <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Сайт для пользователя</a></li>
                     <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Выход</a></li>
                 </ul>
                 {% endwith %}

@@ -14,7 +14,7 @@
         <div class="edit-determine-questionnaire__items">
             {% for field in questionnaire_fields %}
                 <div class="edit-determine-questionnaire__item" data-item-id="{{ forloop.counter }}">
-                    <p><label>Название значимости</label></p>
+                    <p><label>Значимость</label></p>
                     <p><input type="text" class="form-control" name="{{ forloop.counter }}_significance" value="{{ field.significance }}" required></p>
                     <a href="#" class="link link-danger edit-determine-questionnaire__delete-item">Удалить значимость</a>
                     <hr>
@@ -27,7 +27,7 @@
                                 <div class="edit-determine-questionnaire__item-variants">
                                     {% for variant in question.variants %}
                                         <div class="block edit-determine-questionnaire__item-question" data-question-id="{{ forloop.counter }}">
-                                            <label>Название вопроса:</label>
+                                            <label>Вопрос:</label>
                                             <textarea class="form-control" name="{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}_title">{{ variant.title }}</textarea>
                                             <label>Для первой категории:</label>
                                             <textarea class="form-control" name="{{ forloop.parentloop.parentloop.counter }}_{{ forloop.parentloop.counter }}_{{ forloop.counter }}_first_cat_question" required>{{ variant.first_cat_question }}</textarea>

@@ -112,7 +112,7 @@ function edit_determine_questionnaire() {
 
         items.append(`
             <div class="edit-determine-questionnaire__item" data-item-id="${id}">
-                <p><label>Название значимости</label></p>
+                <p><label>Значимость:</label></p>
                 <p><input type="text" class="form-control" name="${id}_significance" required></p>
                 <a href="#" class="link link-danger edit-determine-questionnaire__delete-item">Удалить значимость</a>
                 <hr>
@@ -166,7 +166,7 @@ function edit_determine_questionnaire() {
 
         subitem_variants.append(`
             <div class="block edit-determine-questionnaire__item-question" data-question-id="${id}">
-                <label>Название вопроса:</label>
+                <label>Вопрос:</label>
                 <textarea class="form-control" name="${item_id}_${subitem_id}_${id}_title"></textarea>
                 <label>Для первой категории:</label>
                 <textarea class="form-control" name="${item_id}_${subitem_id}_${id}_first_cat_question" required></textarea>
@@ -253,7 +253,7 @@ function create_questionnaire() {
                 </div>
                 <div class="create-questionnaire__item-field__recommendation">
                     <textarea name="${item_id}_${id}_recommendation" cols="30" placeholder="Рекоммендации" rows="5" class="form-control" required></textarea>
-                <textarea name="${item_id}_${id}_criterion" cols="30" placeholder="Критерий оценимаемости" rows="5" class="form-control"></textarea>
+                <textarea name="${item_id}_${id}_criterion" cols="30" placeholder="Критерий оценки" rows="5" class="form-control"></textarea>
                 </div>
             </div>
         `);
@@ -276,7 +276,7 @@ function create_questionnaire() {
                     <img src="/static/main/images/delete.svg">
                 </div>
                 <div class="create-questionnaire__item-title">
-                    <label class="form-label">Название меры</label>
+                    <label class="form-label">Мера</label>
                     <input type="text" class="form-control" name="${id}_title" required>
                 </div>
                 <div class="create-questionnaire__item-designation">
@@ -316,6 +316,11 @@ function create_questionnaire() {
                     window.location = data.redirect;
                 }, 1000);
             } else {
+                if (data.message) {
+                    $('.form-alerts .form-alerts__error', th).text(data.message);
+                } else {
+                    $('.form-alerts .form-alerts__error', th).text('Неизвестная ошибка!');
+                }
                 $('.form-alerts .form-alerts__error', th).css('display', 'block');
             }
         });
@@ -370,7 +375,7 @@ function edit_questionnaire() {
                 </div>
                 <div class="edit-questionnaire__item-field__recommendation">
                     <textarea name="${item_id}_${id}_recommendation" cols="30" placeholder="Рекоммендации" rows="5" class="form-control" required></textarea>
-                                    <textarea name="${item_id}_${id}_criterion" cols="30" placeholder="Критерий оценимаемости" rows="5" class="form-control" required></textarea>
+                                    <textarea name="${item_id}_${id}_criterion" cols="30" placeholder="Критерий оценки" rows="5" class="form-control"></textarea>
                 </div>
             </div>
         `);
@@ -393,7 +398,7 @@ function edit_questionnaire() {
                     <img src="/static/main/images/delete.svg">
                 </div>
                 <div class="edit-questionnaire__item-title">
-                    <label class="form-label">Название меры</label>
+                    <label class="form-label">Мера</label>
                     <input type="text" class="form-control" name="${id}_title" required>
                 </div>
                 <div class="edit-questionnaire__item-designation">
