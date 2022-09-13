@@ -6,7 +6,7 @@ bs4==0.0.1
 certifi==2021.10.8
 charset-normalizer==2.0.12
 cssselect2==0.5.0
-Django==4.0.3
+Django==4.0.7
 django-better-admin-arrayfield==1.4.2
 django-crontab==0.7.1
 future==0.18.2
